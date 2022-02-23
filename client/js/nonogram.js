@@ -1,3 +1,19 @@
+function Cell(w, h, x, y, value) {
+	this.w = w;
+	this.h = h;
+	this.x = x;
+	this.y = y;
+	this.value = value;
+};
+
+function NumberCell(w, h, x, y, number) {
+	this.w = w;
+	this.h = h;
+	this.x = x;
+	this.y = y;
+	this.number = number;
+};
+
 function Nonogram(levelGrid) {
 	this.levelGrid = levelGrid;
 	let windowWidth = window.innerWidth;
@@ -12,22 +28,22 @@ function Nonogram(levelGrid) {
 
 	this.rowNumbers = [];
 	for(let i=0;i<this.levelGrid.length;i++) {
-		this.rowNumbers[i] = []; //ένας πένακας για κάθε γραμμή
+		this.rowNumbers[i] = []; //ένας πίνακας για κάθε γραμμή
 		this.rowNumbers[i][0] = 0; //δίνουμε μια αρχική τιμή στον πίνακα
 	}
 
-	for(let row = 0; row < this.levelGrid.length; row++) { // Για κάθε γραμμή
+	for(let row=0; row<this.levelGrid.length; row++) { // Για κάθε γραμμή
 		let counter = 0;
 		let depth = 0;
-		for(let column = 0; column < this.levelGrid[row].length; column++) {
-			if(this.levelGrid[row][column] ==1) {
+		for(let column=0; column<this.levelGrid[row].length; column++) {
+			if(this.levelGrid[row][column] == 1) {
 				counter += 1;
 				this.rowNumbers[row][depth] = counter;
 			}else{
 				if(counter != 0) {
 					this.rowNumbers[row][depth] = counter;
 					counter = 0;
-					depth;
+					depth++;
 				}
 			}
 		}
@@ -38,7 +54,7 @@ function Nonogram(levelGrid) {
 		this.columnNumbers[i] = [];
 		this.columnNumbers[i][0] = 0;
 	}
-	for(let counter=0; column<this.levelGrid[0].length; column++) {
+	for(let column=0; column<this.levelGrid[0].length; column++) {
 		let counter = 0;
 		let depth = 0;
 		for(let row = 0; row < this.levelGrid.length; row++) {
@@ -58,7 +74,7 @@ function Nonogram(levelGrid) {
 	this.maxRowNumberSize = 0;
 	this.maxColumnNumberSize = 0;
 
-	for(let i=; i<this.rowNumbers.length; i++) {
+	for(let i=0; i<this.rowNumbers.length; i++) {
 		if(this.maxRowNumberSize < this.rowNumbers[i].length) {
 			this.maxRowNumberSize = this.rowNumbers[i].length;
 		}
@@ -84,5 +100,26 @@ function Nonogram(levelGrid) {
 	this.height = 0;
 
 	this.width = (this.levelGrid[0].length + this.maxRowNumberSize) * this.blockSize;
-	this.heigth = (this.levelGrid.length + this.maxColumnNumberSize) * this.blockSize;
+	this.height = (this.levelGrid.length + this.maxColumnNumberSize) * this.blockSize;
+
+	this.rowNumbersGrid = [];
+	this.columnNumbersGrid = [];
+ 	
+ 	for(var i=0; i<this.rowNumbers.length; i++) {
+ 		for(var y=0; y<this.rowNumbers[i].length; y++) {
+ 			this.rowNumbersGrid.push(new NumberCell(this.blockSize, this.blockSize, (y*this.blockSize), ((this.maxColumnNumberSize)*this.blockSize)+(i*this.blockSize), this.rowNumbers[i][y]));
+ 		}
+ 	}
+ 	for(var i=0; i<this.columnNumbers.length; i++) {
+ 		for(var y=0;y<this.columnNumbers[i].length; y++) {
+ 			this.columnNumbersGrid.push(new NumberCell(this.blockSize, this.blockSize, ((this.maxRowNumberSize)*this.blockSize)+(i*this.blockSize), (y*this.blockSize), this.columnNumbers[i][y]));
+ 		}
+ 	}
+
+ 	this.emptyGrid = [];
+	for(var i=this.maxColumnNumberSize*this.blockSize; i<this.height; i+=this.blockSize) {
+		for(var y=this.maxRowNumberSize*this.blockSize; y<this.width;  y+=this.blockSize) {
+			this.emptyGrid.push(new Cell(this.blockSize, this.blockSize, y, i, 0));
+		}
+	}
 };
