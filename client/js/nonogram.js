@@ -6,11 +6,12 @@ function Cell(w, h, x, y, value) {
 	this.value = value;
 };
 
-function NumberCell(w, h, x, y, number) {
+function NumberCell(w, h, x, y, value, number) {
 	this.w = w;
 	this.h = h;
 	this.x = x;
 	this.y = y;
+	this.value = value;
 	this.number = number;
 };
 
@@ -107,12 +108,12 @@ function Nonogram(levelGrid) {
  	
  	for(var i=0; i<this.rowNumbers.length; i++) {
  		for(var y=0; y<this.rowNumbers[i].length; y++) {
- 			this.rowNumbersGrid.push(new NumberCell(this.blockSize, this.blockSize, (y*this.blockSize), ((this.maxColumnNumberSize)*this.blockSize)+(i*this.blockSize), this.rowNumbers[i][y]));
+ 			this.rowNumbersGrid.push(new NumberCell(this.blockSize, this.blockSize, (y*this.blockSize), ((this.maxColumnNumberSize)*this.blockSize)+(i*this.blockSize), 0, this.rowNumbers[i][y]));
  		}
  	}
  	for(var i=0; i<this.columnNumbers.length; i++) {
  		for(var y=0;y<this.columnNumbers[i].length; y++) {
- 			this.columnNumbersGrid.push(new NumberCell(this.blockSize, this.blockSize, ((this.maxRowNumberSize)*this.blockSize)+(i*this.blockSize), (y*this.blockSize), this.columnNumbers[i][y]));
+ 			this.columnNumbersGrid.push(new NumberCell(this.blockSize, this.blockSize, ((this.maxRowNumberSize)*this.blockSize)+(i*this.blockSize), (y*this.blockSize), 0, this.columnNumbers[i][y]));
  		}
  	}
 
@@ -122,4 +123,14 @@ function Nonogram(levelGrid) {
 			this.emptyGrid.push(new Cell(this.blockSize, this.blockSize, y, i, 0));
 		}
 	}
+
+	this.currentChoice = {
+	   cell: []
+	};
+	this.previousChoice = {
+	   active: false,
+	   cell: []
+	};
+
+
 };
