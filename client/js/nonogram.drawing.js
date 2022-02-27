@@ -26,9 +26,6 @@ Nonogram.prototype.drawGrid = function() {
 		ctx.moveTo((i+1)*this.blockSize, (this.maxColumnNumberSize)*this.blockSize);
 		ctx.lineTo((i+1)*this.blockSize, this.height);
 	}
-	ctx.fillStyle = 'black';
-	ctx.lineWidth = 1;
-	ctx.strokeRect(0,0,this.width,this.height);
 	ctx.stroke();
 	ctx.closePath();
 };
