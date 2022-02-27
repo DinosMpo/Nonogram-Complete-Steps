@@ -122,4 +122,14 @@ function Nonogram(levelGrid) {
 			this.emptyGrid.push(new Cell(this.blockSize, this.blockSize, y, i, 0));
 		}
 	}
+
+	this.currentChoice = {
+	   cell: []
+	};
+	this.previousChoice = {
+	   active: false,
+	   cell: []
+	};
+
+	
 };

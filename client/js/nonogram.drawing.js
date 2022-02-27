@@ -59,14 +59,17 @@ Nonogram.prototype.fillCels = function(mouseX, mouseY) {
 				this.drawWhiteCell(this.emptyGrid[i]);
 				//και το ζωγραφίζουμε μαύρο
 				this.drawBlackCell(this.emptyGrid[i]);
+				this.strokeCurrentChoice(this.emptyGrid[i]);
 			}else if(this.emptyGrid[i].value == 1) {
 				this.emptyGrid[i].value = 2;
 				//Καθαρίζουμε το κελί κάνοντας το άσπρο
 				this.drawWhiteCell(this.emptyGrid[i]);
 				this.drawXCell(this.emptyGrid[i]);
+				this.strokeCurrentChoice(this.emptyGrid[i]);
 			}else { 
 				this.emptyGrid[i].value = 0;
 				this.drawWhiteCell(this.emptyGrid[i]);
+				this.strokeCurrentChoice(this.emptyGrid[i]);
 			}
 		}
 	}
@@ -98,4 +101,34 @@ Nonogram.prototype.drawXCell = function(cell) {
     ctx.lineTo(cell.x + drawXCellValue, cell.y + this.blockSize - drawXCellValue);
     ctx.stroke();
     ctx.closePath();
+};
+
+Nonogram.prototype.strokeCurrentChoice = function(cell) {
+    if(this.previousChoice.active) {
+        ctx.beginPath();
+        for(let i=0; i<this.previousChoice.cell.length; i++) {
+            if(this.previousChoice.cell[i].value === 1) {
+                this.drawWhiteCell(this.previousChoice.cell[i]);
+                this.drawBlackCell(this.previousChoice.cell[i]);
+            }else if(this.previousChoice.cell[i].value === 2) {
+                this.drawWhiteCell(this.previousChoice.cell[i]);
+                this.drawXCell(this.previousChoice.cell[i]);
+            }else{
+                ctx.fillStyle = "white";
+                ctx.fillRect(this.previousChoice.cell[i].x + 2,                                                                     
+                   this.previousChoice.cell[i].y + 2, 
+                   this.previousChoice.cell[i].w - 4, 
+                   this.previousChoice.cell[i].h - 4);
+            }
+        }
+        ctx.stroke();
+        ctx.closePath();
+        this.previousChoice.cell = []; //Αδειάζουμε των πίνακα
+    }
+    this.currentChoice.cell = cell;
+    this.previousChoice.cell.push(cell);
+    this.previousChoice.active = true;
+    ctx.strokeStyle = "red";
+    ctx.lineWidth   = 4;
+    ctx.strokeRect(cell.x+5, cell.y+5, this.blockSize-10, this.blockSize-10);
 };
