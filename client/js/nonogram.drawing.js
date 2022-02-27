@@ -26,9 +26,6 @@ Nonogram.prototype.drawGrid = function() {
 		ctx.moveTo((i+1)*this.blockSize, (this.maxColumnNumberSize)*this.blockSize);
 		ctx.lineTo((i+1)*this.blockSize, this.height);
 	}
-	ctx.fillStyle = 'black';
-	ctx.lineWidth = 1;
-	ctx.strokeRect(0,0,this.width,this.height);
 	ctx.stroke();
 	ctx.closePath();
 };
@@ -212,4 +209,65 @@ Nonogram.prototype.drawPreview = function(cell) {
         ctx.fillStyle = "white";
         ctx.fillRect(x + Math.floor((size-(widthCell*this.levelGrid[0].length))/2), y + Math.floor((size-(heightCell*this.levelGrid.length))/2), widthCell, heightCell);
     }
+};
+
+//Επιλογή πολλαπλών κελιών
+Nonogram.prototype.fillMultiCells = function(mouseX, mouseY, startPointMouseX, startPointMouseY) {
+	var startCellValue = 0;
+	var x = 0;
+	var y = 0;
+	for(var i=0;i<this.emptyGrid.length;i++) {
+	  if(startPointMouseX >= this.emptyGrid[i].x && startPointMouseY >=      
+	    this.emptyGrid[i].y && startPointMouseX <= (this.emptyGrid[i].x +   
+	    this.blockSize) && startPointMouseY <= (this.emptyGrid[i].y +     
+	    this.blockSize)) {
+	      startCellValue = this.emptyGrid[i].value;
+	       x = this.emptyGrid[i].x;
+	      y = this.emptyGrid[i].y;
+	  }
+	}
+
+	if((mouseX > x && (mouseX < x + this.blockSize)) || (mouseY > y && (mouseY < y + this.blockSize))) {
+	    for(var i=0;i<this.emptyGrid.length;i++) { 
+			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y && mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
+				if(this.emptyGrid[i].x == x && this.emptyGrid[i].y == y) {
+					return;
+				}else if(this.emptyGrid[i].x == this.currentChoice.cell.x &&    
+					this.emptyGrid[i].y == this.currentChoice.cell.y) {
+					return;
+				}
+				this.emptyGrid[i].value = startCellValue;
+				if(startCellValue == 1) {
+					this.drawWhiteCell(this.emptyGrid[i]);
+					this.drawBlackCell(this.emptyGrid[i]);
+					this.drawPreview(this.emptyGrid[i]);
+					this.currentChoice.cell = this.emptyGrid[i];
+					this.previousChoice.cell.push(this.emptyGrid[i]);
+					ctx.strokeStyle = "red";
+					ctx.lineWidth   = 4;
+					ctx.strokeRect(this.currentChoice.cell.x+5, this.currentChoice.cell.y+5, 
+					this.blockSize-10, this.blockSize-10);
+				}else if(startCellValue == 2) {
+					this.drawWhiteCell(this.emptyGrid[i]);
+					this.drawPreview(this.emptyGrid[i]);
+					this.drawXCell(this.emptyGrid[i]);
+					this.currentChoice.cell = this.emptyGrid[i];
+					this.previousChoice.cell.push(this.emptyGrid[i]);
+					ctx.strokeStyle = "red";
+					ctx.lineWidth   = 4;
+					ctx.strokeRect(this.currentChoice.cell.x+5, this.currentChoice.cell.y+5, 
+					this.blockSize-10, this.blockSize-10);
+				}else{
+					this.drawWhiteCell(this.emptyGrid[i]);
+					this.drawPreview(this.emptyGrid[i]);
+					this.currentChoice.cell = this.emptyGrid[i];
+					this.previousChoice.cell.push(this.emptyGrid[i]);
+					ctx.strokeStyle = "red";
+					ctx.lineWidth   = 4;
+					ctx.strokeRect(this.currentChoice.cell.x+5, this.currentChoice.cell.y+5, 
+					this.blockSize-10, this.blockSize-10);
+				}
+			}
+		}     
+	}
 };
