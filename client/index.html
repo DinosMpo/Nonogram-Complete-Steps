@@ -7,7 +7,28 @@
 	<link rel="stylesheet" type="text/css" href="css/home.css">
 </head>
 <body>
-	<canvas id="canvas"></canvas>
+	<div id="screen">
+	    <div id = "container">
+	        <!-- Game -->
+	        <div id="game">
+	           <canvas id="canvas"></canvas>
+	       </div>
+	        <!-- Menu -->
+	        <div id="menu"></div>
+	        <!-- Levels -->
+	        <div id="levels"></div>
+	        <!-- Stages 5x5 -->
+	        <div id="levels5x5" class="stages"></div>
+	        <!-- Stages 10x10 -->
+	        <div id="levels10x10" class="stages"></div>
+	        <!-- Stages 15x15 -->
+	        <div id="levels15x15" class="stages"></div>
+	        <!-- Correct for singleplayer-->
+	        <div id="correct-singleplayer" class="black-screen"></div>
+	        <!-- How to play -->
+	        <div id="instructions"></div>
+	    </div>
+	</div>
 
 	<script src="js/jquery-3.1.1.js"></script>
 	<script src="js/nonogram.js"></script>

@@ -1,3 +1,42 @@
-#canvas {
-	border: 1px solid black;
+* {
+  margin: 0;
+  padding: 0;
 }
+
+html, body {
+  width:  100%;
+  height: 100%;
+  display: block;  /* No floating content on sides */
+}
+
+body {
+    background: url(../img/gaming-pattern.png);
+    background-repeat: repeat;
+}
+
+#screen {
+    display: block;
+    margin: 0 auto;
+    padding: 0px;
+    position: relative;
+    height: 100%;
+}
+
+#container {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    display: block;
+}
+
+#game {
+  display: block;
+  position: relative;
+}
+
+#canvas {
+  display: block;
+  margin: 0 auto;
+  padding: 0;
+}
+
