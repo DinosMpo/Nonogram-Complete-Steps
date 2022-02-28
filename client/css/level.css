@@ -1,0 +1,44 @@
+#levels {
+  display: none;
+  border: 3px solid black;
+  border-radius: 25px;
+  position: absolute;
+  text-align: center;
+  margin: 0 auto;
+  top: 30%;
+  transform: translateX(-50%);
+  left: 50%;
+  background: #826e6e;
+  font-weight: bold;
+  font-size: 25px;
+  font-family: Arial;
+  box-shadow: 3px 3px 7px grey;
+  width: 250px;
+  color: white;
+}
+
+#levels h3 {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin: 0;
+  cursor: default;
+}
+
+.level {
+  background: #826e6e;
+  border-top: 1px solid black;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.level:hover {
+  background: linear-gradient(to bottom right, #e0e0d1, grey, #cccccc);
+  color: white;
+}
+
+#close-levels {
+  cursor: pointer;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: 1px solid black;
+}
