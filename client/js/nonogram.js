@@ -132,5 +132,6 @@ function Nonogram(levelGrid) {
 	   cell: []
 	};
 
-
+	this.fillCellChoice = "default";
+	
 };

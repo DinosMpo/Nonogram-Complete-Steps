@@ -63,3 +63,27 @@ function resetTools(toolContainer) {
     tools[0].className += " active";
   }
 }
+
+$(".default").click(function(){
+    if(nonogram.fillCellChoice !== "default") {
+        nonogram.fillCellChoice = "default";
+    }
+});
+
+$(".black").click(function(){
+    if(nonogram.fillCellChoice !== "black") {
+        nonogram.fillCellChoice = "black";
+    }
+});
+
+$(".x").click(function(){
+    if(nonogram.fillCellChoice !== "x") {
+        nonogram.fillCellChoice = "x";
+    }
+});
+
+$(".white").click(function(){
+    if(nonogram.fillCellChoice !== "white") {
+        nonogram.fillCellChoice = "white";
+    }
+});
