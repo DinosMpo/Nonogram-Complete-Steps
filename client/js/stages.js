@@ -118,6 +118,9 @@ function createLevel(level, stage) {
     nonogram.drawGrid();
     nonogram.drawRowNumbers();
     nonogram.drawColumnNumbers();
+
+    resetTools("singleplayer");
+    $("#singleplayer-tools").show();
 }
 
 let stages5x5 = document.getElementById('levels5x5');
