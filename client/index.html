@@ -6,6 +6,8 @@
 	<title>Nonogram Game</title>
 	<link rel="stylesheet" type="text/css" href="css/home.css">
 	<link rel="stylesheet" type="text/css" href="css/level.css">
+	<link rel="stylesheet" type="text/css" href="css/tools.css">
+	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
 </head>
 <body>
 	<div id="screen">
@@ -13,6 +15,14 @@
 	        <!-- Game -->
 	        <div id="game">
 	           <canvas id="canvas"></canvas>
+	           <div id="container-tools">
+				   <ul id="tools"></ul>
+				   <div id="info-right">
+					    <div id="info-progress">
+					        <span id="info-current-progress">0%</span>
+					    </div>
+					</div>
+				</div>
 	       </div>
 	        <!-- Menu -->
 	        <div id="menu">
@@ -81,5 +91,6 @@
 	<script src="js/controls/touch.js"></script>
 	<script src="js/stages.js"></script>
 	<script src="js/main-menu.js"></script>
+	<script src="js/tools.js"></script>
 </body>
 </html>
