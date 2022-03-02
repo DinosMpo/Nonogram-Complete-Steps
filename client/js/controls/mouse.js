@@ -4,10 +4,13 @@ $(canvas).mousedown(function(event) {
 	startPointMouseY = event.offsetY;
 	isDown = true;
 	nonogram.fillCels(startPointMouseX, startPointMouseY);
+    nonogram.findProgress();
 });
 
 $(canvas).mouseup(function(){
     isDown = false;
+    $("#info-current-progress").text("");
+    $("#info-current-progress").text(nonogram.findProgress() + "%");
 });
 
 $(canvas).mouseout(function(){
@@ -19,8 +22,10 @@ $(canvas).mousemove(function(event){
     mouseY = event.offsetY ;
     if(isDown){
         nonogram.fillMultiCells(mouseX,  
-       mouseY, startPointMouseX, 
-       startPointMouseY);
+        mouseY, startPointMouseX, 
+        startPointMouseY);
+        $("#info-current-progress").text("");
+        $("#info-current-progress").text(nonogram.findProgress() + "%");
     }
 });
 

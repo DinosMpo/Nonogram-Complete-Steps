@@ -48,79 +48,123 @@ Nonogram.prototype.drawColumnNumbers = function() {
 };
 
 Nonogram.prototype.fillCels = function(mouseX, mouseY) {
-	//Ορίζουμε το μέγεθος της γραμμής που θέλουμε
-	ctx.lineWidth = 3;
-	//Ξεκινάμε το "μονοπάτι" που θέλουμε να ζωγραφίσουμε
-	ctx.beginPath();
-	// κελιά ανά γραμμή
-	for(var i=0; i<this.rowNumbersGrid.length; i++) {
-	   if(mouseX >= this.rowNumbersGrid[i].x && mouseY >= this.rowNumbersGrid[i].y                && mouseX <= (this.rowNumbersGrid[i].x + this.blockSize) && mouseY <= (this.rowNumbersGrid[i].y + this.blockSize)) {
-		//Αν το κελί έχει value 0 δηλαδή άμα δεν το είχε επιλέξει ο χρήστης τότε να το μαρκάρει με κόκκινη γραμμή 
-	      if(this.rowNumbersGrid[i].value === 0) {
-	          ctx.strokeStyle = "red";
-	         ctx.moveTo(this.rowNumbersGrid[i].x+3, (this.rowNumbersGrid[i].y + this.blockSize)-3);
-	          ctx.lineTo((this.rowNumbersGrid[i].x + this.blockSize)-3, this.rowNumbersGrid[i].y+3);
-	          this.rowNumbersGrid[i].value = 1;
-	       }else{
-		//Αν το κελί έχει value διαφορετικό από 0 δηλαδή άμα ο χρήστης το είχε επιλέξει ήδη μια φορά τότε να το ξανά ζωγραφίσει όπως ήτανε 
-	          ctx.fillStyle = "#e0e0d1";
-	          ctx.fillRect(this.rowNumbersGrid[i].x+2, this.rowNumbersGrid[i].y+2, this.rowNumbersGrid[i].w-3, this.rowNumbersGrid[i].h-3);
-	          ctx.fillStyle = "black";
-	          ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
-	         ctx.fillText( this.rowNumbersGrid[i].number, (this.rowNumbersGrid[i].x) + (this.blockSize/3), (this.rowNumbersGrid[i].y) + ((this.blockSize+8)/2));
-	          this.rowNumbersGrid[i].value = 0;
-	       }
-	      break;
-	   }
-	}
-   
-	// κελιά ανά στήλη
-	for(var i=0; i<this.columnNumbersGrid.length; i++) {
-	        if(mouseX >= this.columnNumbersGrid[i].x && mouseY >= this.columnNumbersGrid[i].y && mouseX <= (this.columnNumbersGrid[i].x + this.blockSize) && mouseY <= (this.columnNumbersGrid[i].y + this.blockSize)) {
-	            if(this.columnNumbersGrid[i].value === 0) {
-	                ctx.strokeStyle = "red";
-	                ctx.moveTo(this.columnNumbersGrid[i].x+3, (this.columnNumbersGrid[i].y + this.blockSize)-3);
-	                ctx.lineTo((this.columnNumbersGrid[i].x + this.blockSize)-3, this.columnNumbersGrid[i].y+3);
-	                this.columnNumbersGrid[i].value = 1;
-	            }else{
-	                ctx.fillStyle = "#e0e0d1";
-	                ctx.fillRect(this.columnNumbersGrid[i].x+2, this.columnNumbersGrid[i].y+2, this.columnNumbersGrid[i].w-3, this.columnNumbersGrid[i].h-3);
-	                ctx.fillStyle = "black";
-	                ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
-	                ctx.fillText(this.columnNumbersGrid[i].number, (this.columnNumbersGrid[i].x) + (this.blockSize/3), (this.columnNumbersGrid[i].y) + ((this.blockSize+8)/2));
-	                this.columnNumbersGrid[i].value = 0;
-	            }
-	            break;
-	        }
-	    }
-	ctx.stroke();
-	ctx.closePath();
-
-	for(var i=0; i<this.emptyGrid.length; i++) {
-		if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y && mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
-			if(this.emptyGrid[i].value == 0) {
-				this.emptyGrid[i].value = 1;
-				//Καθαρίζουμε το κελί κάνοντας το άσπρο
-				this.drawWhiteCell(this.emptyGrid[i]);
-				//και το ζωγραφίζουμε μαύρο
-				this.drawBlackCell(this.emptyGrid[i]);
-				this.strokeCurrentChoice(this.emptyGrid[i]);
-				this.drawPreview(this.emptyGrid[i]);
-			}else if(this.emptyGrid[i].value == 1) {
-				this.emptyGrid[i].value = 2;
-				//Καθαρίζουμε το κελί κάνοντας το άσπρο
-				this.drawWhiteCell(this.emptyGrid[i]);
-				this.drawXCell(this.emptyGrid[i]);
-				this.strokeCurrentChoice(this.emptyGrid[i]);
-				this.drawPreview(this.emptyGrid[i]);
-			}else { 
-				this.emptyGrid[i].value = 0;
-				this.drawWhiteCell(this.emptyGrid[i]);
-				this.strokeCurrentChoice(this.emptyGrid[i]);
-				this.drawPreview(this.emptyGrid[i]);
+	if(this.fillCellChoice == "default") {
+		for(var i=0;i<this.emptyGrid.length;i++) {
+			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y &&  mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
+				if(this.emptyGrid[i].value == 0) { //paint the cell black
+					this.cellChoices.update();
+	              	this.cellChoices.pastCells.push({cell: i, value: 0});
+	                this.emptyGrid[i].value = 1;
+	                this.drawWhiteCell(this.emptyGrid[i]);
+	                this.drawBlackCell(this.emptyGrid[i]);
+	                this.cellChoices.newCells.push({cell: i, value: 1});
+            		this.strokeCurrentChoice(this.emptyGrid[i]);
+	                this.drawPreview(this.emptyGrid[i]);
+	                this.cellChoices.index ++;
+				}else if(this.emptyGrid[i].value == 1) { //fill the cell with an x
+					this.cellChoices.update();
+	              	this.cellChoices.pastCells.push({cell: i, value: 1});
+	                this.emptyGrid[i].value = 2;
+	                this.drawWhiteCell(this.emptyGrid[i]);
+	                this.drawXCell(this.emptyGrid[i]);
+	                this.cellChoices.newCells.push({cell: i, value: 2});
+	            	this.strokeCurrentChoice(this.emptyGrid[i]);
+	                this.drawPreview(this.emptyGrid[i]);
+	                this.cellChoices.index ++;
+				}else { //Clear the cell
+					this.cellChoices.update();
+            		this.cellChoices.pastCells.push({cell: i, value: 2});    
+	                this.emptyGrid[i].value = 0;
+	                this.drawWhiteCell(this.emptyGrid[i]);
+	                this.cellChoices.newCells.push({cell: i, value: 0});
+           			this.strokeCurrentChoice(this.emptyGrid[i]);
+	                this.drawPreview(this.emptyGrid[i]);
+	                this.cellChoices.index ++;
+				}
+				break; //Για να βγούμε από την for αφού έχουμε  βρεί το κελί
 			}
 		}
-	}
+	}else if(this.fillCellChoice == "black"){
+		for(var i=0;i<this.emptyGrid.length;i++) {
+			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y && mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
+				if(this.emptyGrid[i].value !== 1) {
+               		this.cellChoices.update();
+               		if(this.emptyGrid[i].value == 0) {
+                   		this.cellChoices.pastCells.push({cell: i, value: 0});
+              	 	}else{
+                   		this.cellChoices.pastCells.push({cell: i, value: 2});
+               		}
+	               	this.emptyGrid[i].value = 1;//fil the cell black
+	               	this.drawWhiteCell(this.emptyGrid[i]);
+	               	this.drawBlackCell(this.emptyGrid[i]);
+	               	this.cellChoices.newCells.push({cell: i, value: 1});
+	               	this.strokeCurrentChoice(this.emptyGrid[i]);
+	               	this.drawPreview(this.emptyGrid[i]);
+	               	this.cellChoices.index ++;
+				}else{
+					this.cellChoices.update();
+					this.cellChoices.pastCells.push({cell: i, value: 1});
+					this.emptyGrid[i].value = 0;
+					this.drawWhiteCell(this.emptyGrid[i]);
+					this.cellChoices.newCells.push({cell: i, value: 0});
+					this.strokeCurrentChoice(this.emptyGrid[i]);
+					this.drawPreview(this.emptyGrid[i]);
+					this.cellChoices.index ++;
+				}
+				break; //Για να βγούμε από την for αφού έχουμε  βρεί το κελί
+			}
+		}
+	}else if(this.fillCellChoice == "x") {
+		for(var i=0;i<this.emptyGrid.length;i++) {
+			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y && mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
+				if(this.emptyGrid[i].value !== 2) {
+	                this.cellChoices.update();
+	                if(this.emptyGrid[i].value == 0) {
+	                    this.cellChoices.pastCells.push({cell: i, value: 0});
+	                }else{
+                    	this.cellChoices.pastCells.push({cell: i, value: 1});
+                	}
+	                this.emptyGrid[i].value = 2;
+	                this.drawWhiteCell(this.emptyGrid[i]);
+	                this.drawXCell(this.emptyGrid[i]);
+	                this.cellChoices.newCells.push({cell: i, value: 2});
+	                this.strokeCurrentChoice(this.emptyGrid[i]);
+	                this.drawPreview(this.emptyGrid[i]);
+	                this.cellChoices.index ++;
+	            }else{
+	                this.cellChoices.update();
+	                this.cellChoices.pastCells.push({cell: i, value: 2});
+	                this.emptyGrid[i].value = 0;
+	                this.drawWhiteCell(this.emptyGrid[i]);
+	                this.cellChoices.newCells.push({cell: i, value: 0});
+	                this.strokeCurrentChoice(this.emptyGrid[i]);
+	                this.drawPreview(this.emptyGrid[i]);
+	                this.cellChoices.index ++;
+	            }
+				break; //Για να βγούμε από την for αφού έχουμε  βρεί το κελί
+			}
+		}
+	}else if(this.fillCellChoice == "white") {
+		for(var i=0;i<this.emptyGrid.length;i++) {
+			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y && mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
+				if(this.emptyGrid[i].value !== 0) {
+	                this.cellChoices.update();
+	                if(this.emptyGrid[i].value == 1) {
+	                    this.cellChoices.pastCells.push({cell: i, value: 1});
+	                }else{
+	                    this.cellChoices.pastCells.push({cell: i, value: 2});
+	                }
+	                this.emptyGrid[i].value = 0;
+	                this.drawWhiteCell(this.emptyGrid[i]);
+	                this.cellChoices.newCells.push({cell: i, value: 0});
+	                this.strokeCurrentChoice(this.emptyGrid[i]);
+	                this.drawPreview(this.emptyGrid[i]);
+	                this.cellChoices.index ++;
+	            }
+				break; //Για να βγούμε από την for αφού έχουμε  βρεί το κελί
+			}
+		}
+ 	}
 };
 
 //Ζωγραφίζει το κελί μαύρο
@@ -229,13 +273,16 @@ Nonogram.prototype.fillMultiCells = function(mouseX, mouseY, startPointMouseX, s
 
 	if((mouseX > x && (mouseX < x + this.blockSize)) || (mouseY > y && (mouseY < y + this.blockSize))) {
 	    for(var i=0;i<this.emptyGrid.length;i++) { 
-			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y && mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
+			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y && mouseX   
+			<= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + 
+			this.blockSize)) {
 				if(this.emptyGrid[i].x == x && this.emptyGrid[i].y == y) {
 					return;
 				}else if(this.emptyGrid[i].x == this.currentChoice.cell.x &&    
 					this.emptyGrid[i].y == this.currentChoice.cell.y) {
 					return;
 				}
+				this.cellChoices.pastCells.push({cell: i, value: this.emptyGrid[i].value});
 				this.emptyGrid[i].value = startCellValue;
 				if(startCellValue == 1) {
 					this.drawWhiteCell(this.emptyGrid[i]);
@@ -247,6 +294,8 @@ Nonogram.prototype.fillMultiCells = function(mouseX, mouseY, startPointMouseX, s
 					ctx.lineWidth   = 4;
 					ctx.strokeRect(this.currentChoice.cell.x+5, this.currentChoice.cell.y+5, 
 					this.blockSize-10, this.blockSize-10);
+					this.cellChoices.newCells.push({cell: i, value: 1});
+					this.cellChoices.index ++;
 				}else if(startCellValue == 2) {
 					this.drawWhiteCell(this.emptyGrid[i]);
 					this.drawPreview(this.emptyGrid[i]);
@@ -257,6 +306,8 @@ Nonogram.prototype.fillMultiCells = function(mouseX, mouseY, startPointMouseX, s
 					ctx.lineWidth   = 4;
 					ctx.strokeRect(this.currentChoice.cell.x+5, this.currentChoice.cell.y+5, 
 					this.blockSize-10, this.blockSize-10);
+					this.cellChoices.newCells.push({cell: i, value: 1});
+					this.cellChoices.index ++;
 				}else{
 					this.drawWhiteCell(this.emptyGrid[i]);
 					this.drawPreview(this.emptyGrid[i]);
@@ -266,8 +317,11 @@ Nonogram.prototype.fillMultiCells = function(mouseX, mouseY, startPointMouseX, s
 					ctx.lineWidth   = 4;
 					ctx.strokeRect(this.currentChoice.cell.x+5, this.currentChoice.cell.y+5, 
 					this.blockSize-10, this.blockSize-10);
+					this.cellChoices.newCells.push({cell: i, value: 1});
+					this.cellChoices.index ++;
 				}
 			}
-		}     
+		}      
 	}
 };
+

@@ -37,7 +37,25 @@
   height: 100%;
 }
 
-.redo, .undo {
+.help {
+  padding-top: 5px;
+  height: 22px;
+}
+
+.active {
+    background: linear-gradient(to bottom right, red, grey);
+}
+
+.redo_undo {
+  display: block;
+  position: relative;
+}
+
+.expand {
+  display: none;
+}
+
+.redo {
   display: inline;
   width: 15px;
   height: 15px;
@@ -46,13 +64,39 @@
   padding: 5px;
   border: 2px solid black;
   border-radius: 25px;
+  position: absolute;
+  top: -95%;
 }
 
-.help {
-  padding-top: 5px;
-  height: 22px;
+.undo {
+  display: inline;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(to bottom, #e0e0d1 50%, #999966 100%);
+  margin-right: 1px;
+  padding: 5px;
+  border: 2px solid black;
+  border-radius: 25px;
+  left: -58%;
+  top: -95%;
+  position: absolute;
 }
 
-.active {
-    background: linear-gradient(to bottom right, red, grey);
-} 
+.redo:active, .undo:active {
+  background: linear-gradient(to bottom right, red, grey);
+}
+
+#info-right {
+  display: inline-block;
+  float: right;
+}
+
+#info-progress {
+  width: 60px;
+  height: 25px;
+  font-family: 'Press Start 2P';
+  padding: 2px;
+  background-color: black;
+  color: #ffcc00;
+  text-align: right;
+}

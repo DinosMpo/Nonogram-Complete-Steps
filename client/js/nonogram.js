@@ -133,5 +133,30 @@ function Nonogram(levelGrid) {
 	};
 
 	this.fillCellChoice = "default";
-	
+
+	this.cellChoices = {
+        pastCells: [], newCells : [], index: 0,
+        update   : function() {
+            if(this.index < this.pastCells.length) {
+                let limit = this.pastCells.length;
+                for(let i=this.index; i<limit; i++) {
+                    this.pastCells.pop();
+                    this.newCells.pop();
+                }
+                this.index = this.pastCells.length;
+            }
+        }
+	};
+
+	this.findProgress = function() {
+		let progress = 0;
+		for(let i=0; i<this.emptyGrid.length; i++) {
+			if(this.emptyGrid[i].value != 0) {
+				progress++;
+			}
+		}
+		progress = (progress * 100) / this.emptyGrid.length;
+		return Math.floor(progress);
+	};
+
 };
