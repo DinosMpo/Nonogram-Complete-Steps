@@ -48,6 +48,53 @@ Nonogram.prototype.drawColumnNumbers = function() {
 };
 
 Nonogram.prototype.fillCels = function(mouseX, mouseY) {
+	//Ορίζουμε το μέγεθος της γραμμής που θέλουμε
+	ctx.lineWidth = 3;
+	//Ξεκινάμε το "μονοπάτι" που θέλουμε να ζωγραφίσουμε
+	ctx.beginPath();
+	// κελιά ανά γραμμή
+	for(var i=0; i<this.rowNumbersGrid.length; i++) {
+	   if(mouseX >= this.rowNumbersGrid[i].x && mouseY >= this.rowNumbersGrid[i].y                && mouseX <= (this.rowNumbersGrid[i].x + this.blockSize) && mouseY <= (this.rowNumbersGrid[i].y + this.blockSize)) {
+	        //Αν το κελί έχει value 0 δηλαδή άμα δεν το είχε επιλέξει ο χρήστης τότε να το μαρκάρει με κόκκινη γραμμή 
+	      if(this.rowNumbersGrid[i].value === 0) {
+	          ctx.strokeStyle = "red";
+	         ctx.moveTo(this.rowNumbersGrid[i].x+3, (this.rowNumbersGrid[i].y + this.blockSize)-3);
+	          ctx.lineTo((this.rowNumbersGrid[i].x + this.blockSize)-3, this.rowNumbersGrid[i].y+3);
+	          this.rowNumbersGrid[i].value = 1;
+	       }else{
+	          //Αν το κελί έχει value διαφορετικό από 0 δηλαδή άμα ο χρήστης το είχε επιλέξει ήδη μια φορά τότε να το ξανά ζωγραφίσει όπως ήτανε 
+	          ctx.fillStyle = "#e0e0d1";
+	          ctx.fillRect(this.rowNumbersGrid[i].x+2, this.rowNumbersGrid[i].y+2, this.rowNumbersGrid[i].w-3, this.rowNumbersGrid[i].h-3);
+	          ctx.fillStyle = "black";
+	          ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
+	        	ctx.fillText( this.rowNumbersGrid[i].number, (this.rowNumbersGrid[i].x) + (this.blockSize/3), (this.rowNumbersGrid[i].y) + ((this.blockSize+8)/2));
+	          this.rowNumbersGrid[i].value = 0;
+	       }
+	      break;
+	   }
+	}
+   
+	// κελιά ανά στήλη
+	for(var i=0; i<this.columnNumbersGrid.length; i++) {
+	        if(mouseX >= this.columnNumbersGrid[i].x && mouseY >= this.columnNumbersGrid[i].y && mouseX <= (this.columnNumbersGrid[i].x + this.blockSize) && mouseY <= (this.columnNumbersGrid[i].y + this.blockSize)) {
+	            if(this.columnNumbersGrid[i].value === 0) {
+	                ctx.strokeStyle = "red";
+	                ctx.moveTo(this.columnNumbersGrid[i].x+3, (this.columnNumbersGrid[i].y + this.blockSize)-3);
+	                ctx.lineTo((this.columnNumbersGrid[i].x + this.blockSize)-3, this.columnNumbersGrid[i].y+3);
+	                this.columnNumbersGrid[i].value = 1;
+	            }else{
+	                ctx.fillStyle = "#e0e0d1";
+	                ctx.fillRect(this.columnNumbersGrid[i].x+2, this.columnNumbersGrid[i].y+2, this.columnNumbersGrid[i].w-3, this.columnNumbersGrid[i].h-3);
+	                ctx.fillStyle = "black";
+	                ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
+	                ctx.fillText(this.columnNumbersGrid[i].number, (this.columnNumbersGrid[i].x) + (this.blockSize/3), (this.columnNumbersGrid[i].y) + ((this.blockSize+8)/2));
+	                this.columnNumbersGrid[i].value = 0;
+	            }
+	            break;
+	        }
+	    }
+	ctx.stroke();
+	ctx.closePath();
 	if(this.fillCellChoice == "default") {
 		for(var i=0;i<this.emptyGrid.length;i++) {
 			if(mouseX >= this.emptyGrid[i].x && mouseY >= this.emptyGrid[i].y &&  mouseX <= (this.emptyGrid[i].x + this.blockSize) && mouseY <= (this.emptyGrid[i].y + this.blockSize)) {
