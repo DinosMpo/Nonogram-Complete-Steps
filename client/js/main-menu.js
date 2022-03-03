@@ -54,3 +54,9 @@ $(".stage").click(function(){
     $("#levels15x15").hide();
     $("#container-tools").show();
 });
+
+for(let i=0; i<allStages.length; i++) {
+    if(isCorrect("correct-" + allStages[i])) {
+            $(".correct-" + allStages[i]).show();
+    }
+}

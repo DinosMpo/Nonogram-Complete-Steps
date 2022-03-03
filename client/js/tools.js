@@ -144,6 +144,10 @@ $(".undo").click(function(event){
         nonogram.strokeCurrentChoice(nonogram.emptyGrid[cell]);
         nonogram.cellChoices.index --;
     }
+    nonogram.findUserChoices();
+    store(currentStage, nonogram.userChoices.levelGrid);
+    store('rowNumbersGrid-'+currentStage, nonogram.userChoices.rowNumbersGrid);
+    store('columnNumbersGrid-'+currentStage, nonogram.userChoices.columnNumbersGrid);
     nonogram.findProgress();
     $("#info-current-progress").text("");
     $("#info-current-progress").text(nonogram.findProgress() + "%");
@@ -181,6 +185,10 @@ $(".redo").click(function(event){
         nonogram.strokeCurrentChoice(nonogram.emptyGrid[cell]);
         nonogram.cellChoices.index ++;
     }
+    nonogram.findUserChoices();
+    store(currentStage, nonogram.userChoices.levelGrid);
+    store('rowNumbersGrid-'+currentStage, nonogram.userChoices.rowNumbersGrid);
+    store('columnNumbersGrid-'+currentStage, nonogram.userChoices.columnNumbersGrid);
     nonogram.findProgress();
     $("#info-current-progress").text("");
     $("#info-current-progress").text(nonogram.findProgress() + "%");
@@ -202,6 +210,10 @@ $(".clear").click(function() {
     nonogram.drawColumnNumbers();
     nonogram.cellChoices.index = 0;
     nonogram.cellChoices.update();
+    nonogram.findUserChoices();
+    store(currentStage, nonogram.userChoices.levelGrid);
+    store('rowNumbersGrid-'+currentStage, nonogram.userChoices.rowNumbersGrid);
+    store('columnNumbersGrid-'+currentStage, nonogram.userChoices.columnNumbersGrid);
     nonogram.findProgress();
     $("#info-current-progress").text("");
     $("#info-current-progress").text(nonogram.findProgress() + "%");
@@ -257,6 +269,10 @@ $(".help").click(function() {
         nonogram.drawPreview(nonogram.emptyGrid[helpChoices.index[randomChoice]]);
         ctx.strokeStyle = "black";
     }
+    nonogram.findUserChoices();
+    store(currentStage, nonogram.userChoices.levelGrid);
+    store('rowNumbersGrid-'+currentStage, nonogram.userChoices.rowNumbersGrid);
+    store('columnNumbersGrid-'+currentStage, nonogram.userChoices.columnNumbersGrid);
     nonogram.findProgress();
     $("#info-current-progress").text("");
     $("#info-current-progress").text(nonogram.findProgress() + "%");
@@ -273,4 +289,48 @@ $(".home").click(function(){
     canvas.style.border = "none";
     state = "menu";
     $("#menu").show();
+});
+
+$('#restart').click(function() {
+    for(let i=0; i<nonogram.emptyGrid.length; i++) {
+        nonogram.emptyGrid[i].value = 0;
+    }
+
+    for(let i=0; i<nonogram.rowNumbersGrid.length; i++) {
+        nonogram.rowNumbersGrid[i].value = 0;
+    }
+
+    for(let i=0; i<nonogram.columnNumbersGrid.length; i++) {
+        nonogram.columnNumbersGrid[i].value = 0;
+    }
+
+    ctx.clearRect(0,0,canvas.width, canvas.height);
+    nonogram.drawGrid();
+    nonogram.drawRowNumbers();
+    nonogram.drawColumnNumbers();
+    nonogram.findUserChoices();
+    store(currentStage, nonogram.userChoices.levelGrid);
+    store('rowNumbersGrid-'+currentStage, nonogram.userChoices.rowNumbersGrid);
+    store('columnNumbersGrid-'+currentStage, nonogram.userChoices.columnNumbersGrid);
+    store("correct-" + currentStage, 0);
+    $("#correct-level-tools").hide();
+    $("#singleplayer-tools").show();
+    $("#correct-singleplayer").hide();
+    $(".correct-" + currentStage).hide();
+    $("#info-current-progress").text("");
+    $("#info-current-progress").text(nonogram.findProgress() + "%");
+});
+
+$("#continueGame").click(function(){
+    $("#container-tools").hide();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    container.style.transform = "none";
+    container.style.left = "0%";
+    container.style.top = "0%";
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    canvas.style.border = "none";
+    state = "menu";
+    $("#correct-singleplayer").hide();
+    $("#levels").show();
 });

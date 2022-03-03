@@ -115,10 +115,23 @@ function createLevel(level, stage) {
     canvas.height = nonogram.height;
     canvas.style.border = "1px solid black";
     clearCanvas();
-    nonogram.drawGrid();
-    nonogram.drawRowNumbers();
-    nonogram.drawColumnNumbers();
-
+    if(!localStorage.getItem(currentStage)) {
+            nonogram.drawGrid();
+            nonogram.drawRowNumbers();
+            nonogram.drawColumnNumbers();
+    }else{
+            nonogram.drawGrid();
+            nonogram.drawRowNumbers();
+            nonogram.drawColumnNumbers();
+            nonogram.retrieveProgress(retrieve(currentStage), 
+           retrieve('rowNumbersGrid-'+currentStage), 
+           retrieve('columnNumbersGrid-'+currentStage));
+            nonogram.redrawProgress();
+    }
+    if(nonogram.checkProgress()) {
+        $("#correct-singleplayer").show();
+        $("#correct-level-tools").show();
+    }
     resetTools("singleplayer");
     $("#singleplayer-tools").show();
 }
@@ -190,3 +203,4 @@ closeLevels15x15.classList.add('close-levels15x15');
 closeLevels15x15.innerHTML = 'Close';
 stages15x15.append(closeLevels15x15);
 
+let allStages = ['chess', 'snake', 'airplane', 'smile', 'questionmark', 'leaf', 'music', 'tree', 'dolphin', 'alarm', 'more-music'];

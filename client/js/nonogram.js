@@ -159,4 +159,62 @@ function Nonogram(levelGrid) {
 		return Math.floor(progress);
 	};
 
+	this.userChoices = {};
+	this.userChoices.levelGrid = [];
+	this.userChoices.rowNumbersGrid = [];
+	this.userChoices.columnNumbersGrid = [];
+
+	this.findUserChoices = function() {
+	    for(let i = 0; i < this.emptyGrid.length; i++) {
+	        this.userChoices.levelGrid[i] = this.emptyGrid[i].value;
+	    }
+
+	    for(let i=0; i<this.rowNumbersGrid.length; i++) {
+	        this.userChoices.rowNumbersGrid[i] = this.rowNumbersGrid[i].value;
+	    }
+	        
+	    for(let i=0; i<this.columnNumbersGrid.length; i++) {
+	       this.userChoices.columnNumbersGrid[i] = this.columnNumbersGrid[i].value;
+	    }
+	};
+
+	this.retrieveProgress = function(levelGrid, rowNumbersGrid, columnNumbersGrid) {
+	    this.userChoices.levelGrid = levelGrid;
+	    this.userChoices.rowNumbersGrid = rowNumbersGrid;
+	    this.userChoices.columnNumbersGrid = columnNumbersGrid;
+	    for(let i=0; i < this.emptyGrid.length; i++) {
+	        this.emptyGrid[i].value = this.userChoices.levelGrid[i];
+	    }
+
+	    for(let i=0; i<this.rowNumbersGrid.length; i++) {
+	        this.rowNumbersGrid[i].value = this.userChoices.rowNumbersGrid[i];
+	    }
+
+	    for(let i=0; i<this.columnNumbersGrid.length; i++) {
+	        this.columnNumbersGrid[i].value = this.userChoices.columnNumbersGrid[i];
+	    }
+	};
+	
+	this.checkProgress = function() {
+		var index = 0;
+		for(var i=0;i<this.levelGrid.length;i++) {
+			for(var y=0;y<this.levelGrid[i].length;y++) {
+				if(this.levelGrid[i][y] == 1 && this.emptyGrid[index].value == 1) {
+					this.correct = true;
+				}
+				else if(this.levelGrid[i][y] == 0 && (this.emptyGrid[index].value == 0 || this.emptyGrid[index].value == 2)){
+					this.correct = true;
+				}
+				else{
+					this.correct = false;
+					return false;
+				}
+			index ++;
+			}
+		}
+		if(this.correct == true) {
+			return true;
+		}
+	}
+	
 };

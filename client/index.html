@@ -47,7 +47,14 @@
 	        <!-- Stages 15x15 -->
 	        <div id="levels15x15" class="stages"></div>
 	        <!-- Correct for singleplayer-->
-	        <div id="correct-singleplayer" class="black-screen"></div>
+	        <div id="correct-singleplayer" class="black-screen">
+	        	<div id="correct-popup">
+			        <h2>Correct !</h2>
+			        <img src="img/green-button.png" style="width:60px; height:60px; margin: 0 auto;">
+			        <p id="restart">Restart</p>
+			        <p id="continueGame">Exit</p>
+			    </div>
+				        </div>
 	        <!-- How to play -->
 	        <div id="instructions">
 	        	<div id="wrapper">
@@ -90,6 +97,7 @@
 	<script src="js/controls/mouse.js"></script>
 	<script src="js/controls/touch.js"></script>
 	<script src="js/stages.js"></script>
+	<script src="js/store.js"></script>
 	<script src="js/main-menu.js"></script>
 	<script src="js/tools.js"></script>
 </body>
