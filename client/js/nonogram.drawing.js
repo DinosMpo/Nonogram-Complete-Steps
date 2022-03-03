@@ -325,3 +325,37 @@ Nonogram.prototype.fillMultiCells = function(mouseX, mouseY, startPointMouseX, s
 	}
 };
 
+Nonogram.prototype.redrawProgress = function() {
+    for(let i=0; i<this.emptyGrid.length; i++) {
+        if(this.emptyGrid[i].value == 1){
+             this.drawBlackCell(this.emptyGrid[i]);
+             this.drawPreview(this.emptyGrid[i]);
+         }else if(this.emptyGrid[i].value == 2) {
+           this.drawWhiteCell(this.emptyGrid[i]);
+           this.drawXCell(this.emptyGrid[i]);
+           this.drawPreview(this.emptyGrid[i]);
+         }
+    }
+    ctx.beginPath();
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 3;
+    for(let i=0; i<this.rowNumbersGrid.length; i++) {
+        if(this.rowNumbersGrid[i].value == 1) {
+             ctx.moveTo(this.rowNumbersGrid[i].x+3, 
+             (this.rowNumbersGrid[i].y + this.blockSize)-3);
+           ctx.lineTo((this.rowNumbersGrid[i].x + this.blockSize)-3, 
+             this.rowNumbersGrid[i].y+3);
+         }
+    }
+
+    for(let i=0; i<this.columnNumbersGrid.length; i++) {
+        if(this.columnNumbersGrid[i].value == 1) {    
+             ctx.moveTo(this.columnNumbersGrid[i].x+3, 
+             (this.columnNumbersGrid[i].y + this.blockSize)-3);
+           ctx.lineTo((this.columnNumbersGrid[i].x + this.blockSize)-3, 
+             this.columnNumbersGrid[i].y+3);
+         }
+   }
+   ctx.closePath();
+   ctx.stroke();
+};
