@@ -120,13 +120,13 @@ function createLevel(level, stage) {
             nonogram.drawRowNumbers();
             nonogram.drawColumnNumbers();
     }else{
-            nonogram.drawGrid();
-            nonogram.drawRowNumbers();
-            nonogram.drawColumnNumbers();
-            nonogram.retrieveProgress(retrieve(currentStage), 
-           retrieve('rowNumbersGrid-'+currentStage), 
-           retrieve('columnNumbersGrid-'+currentStage));
-            nonogram.redrawProgress();
+        nonogram.drawGrid();
+        nonogram.drawRowNumbers();
+        nonogram.drawColumnNumbers();
+        nonogram.retrieveProgress(retrieve(currentStage), 
+        retrieve('rowNumbersGrid-'+currentStage), 
+        retrieve('columnNumbersGrid-'+currentStage));
+        nonogram.redrawProgress();
     }
     if(nonogram.checkProgress()) {
         $("#correct-singleplayer").show();
@@ -134,6 +134,8 @@ function createLevel(level, stage) {
     }
     resetTools("singleplayer");
     $("#singleplayer-tools").show();
+    $("#info-current-progress").text("");
+    $("#info-current-progress").text(nonogram.findProgress() + "%");
 }
 
 let stages5x5 = document.getElementById('levels5x5');
