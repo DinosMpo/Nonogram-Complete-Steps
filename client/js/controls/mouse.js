@@ -2,8 +2,12 @@ let isDown = false;
 $(canvas).mousedown(function(event) {
 	startPointMouseX = event.offsetX;
 	startPointMouseY = event.offsetY;
-	isDown = true;
-	nonogram.fillCels(startPointMouseX, startPointMouseY);
+	isDown = true;        
+    ctx.save();
+    ctx.translate(originX,originY);
+    ctx.scale(scaleFactor,scaleFactor);
+    nonogram.fillCels((startPointMouseX-originX)/scaleFactor, (startPointMouseY-originY)/scaleFactor);
+    ctx.restore();
     nonogram.findUserChoices();
     store(currentStage, nonogram.userChoices.levelGrid);
     store('rowNumbersGrid-'+currentStage, nonogram.userChoices.rowNumbersGrid);
@@ -44,9 +48,11 @@ $(canvas).mousemove(function(event){
     mouseX = event.offsetX ;
     mouseY = event.offsetY ;
     if(isDown){
-        nonogram.fillMultiCells(mouseX,  
-        mouseY, startPointMouseX, 
-        startPointMouseY);
+        ctx.save();
+        ctx.translate(originX,originY);
+        ctx.scale(scaleFactor,scaleFactor);
+        nonogram.fillMultiCells((mouseX-originX)/scaleFactor, (mouseY-originY)/scaleFactor, (startPointMouseX-originX)/scaleFactor, (startPointMouseY-originY)/scaleFactor);
+        ctx.restore();
         $("#info-current-progress").text("");
         $("#info-current-progress").text(nonogram.findProgress() + "%");
     }
