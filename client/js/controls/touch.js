@@ -10,11 +10,11 @@ $(canvas).on('touchstart', function(event) {
 $(canvas).on('touchend', function(event) { 
     isDown = false;
     if(nonogram.checkProgress()) {
-        $("#correct").show();
+        $("#correct-singleplayer").show();
         store("correct-" + currentStage, 1);
         $(".correct-" + currentStage).show();
     }else{
-        $("#correct").hide();
+        $("#correct-singleplayer").hide();
         store("correct-" + currentStage, 0);
         $(".correct-" + currentStage).hide();
     }
