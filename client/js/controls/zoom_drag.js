@@ -4,6 +4,18 @@ let originWidth = 0;
 let originHeight = 0;
 let scaleFactor = 1;
 let translatePos = {x: 0,y: 0};
+let myLimit = 300;
+let limitTop = myLimit;
+let limitLeft = myLimit;
+let limitBottom;
+let limitRight;
+let dragged = 0;
+let dragStart = {x:0,y:0};
+let activeDragControl;
+let topControl = document.getElementById('top');
+let leftControl = document.getElementById('left');
+let rightControl = document.getElementById('right');
+let bottomControl = document.getElementById('bottom');
 
 function trackTransforms(x, y, w, h) {
     originX = x;
@@ -86,6 +98,18 @@ function zoom(scaleFactor, translatePos) {
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
+
+    if(scaleFactor !== 1) {
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+    }else{
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+    }
 };
 
 $(canvas).bind('mousewheel', function(event) {
@@ -98,4 +122,121 @@ $(canvas).bind('DOMMouseScroll', function(event) {
     if(state === "level" || state === "multiplayer") {
         handleScroll(event.detail);
     }
+});
+
+function drag(translatePos) {
+    clearCanvas();
+    ctx.save();
+    ctx.translate(translatePos.x,translatePos.y);
+    ctx.scale(scaleFactor,scaleFactor);
+    nonogram.drawGrid();
+    nonogram.drawRowNumbers();
+    nonogram.drawColumnNumbers();
+    nonogram.retrieveProgress(retrieve(currentStage), 
+        retrieve('rowNumbersGrid-'+currentStage),
+        retrieve('columnNumbersGrid-'+currentStage));
+    nonogram.redrawProgress();
+    ctx.restore();
+};
+
+function dragControl(x,y) {
+    translatePos.x = x;
+    translatePos.y = y;
+    if((limitTop>translatePos.y) && (limitLeft>translatePos.x) && (limitRight<(translatePos.x+(scaleFactor*canvas.width))) && (limitBottom<(translatePos.y+(scaleFactor*canvas.height)))) {
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitTop<=translatePos.y && limitLeft<=translatePos.x) {
+        translatePos.x = originX;
+        translatePos.y = originY;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitTop<=translatePos.y && limitRight>=(translatePos.x+(scaleFactor*limitRight))) {
+        translatePos.x = originX;
+        translatePos.y = originY;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitRight>=(translatePos.x+(scaleFactor*limitRight)) && limitBottom>=(translatePos.y+(scaleFactor*limitBottom))) {
+        translatePos.x = originX;
+        translatePos.y = originY;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitBottom>=(translatePos.y+(scaleFactor*limitBottom)) && limitLeft<=translatePos.x) {
+        translatePos.x = originX;
+        translatePos.y = originY;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitTop<=translatePos.y) {
+        translatePos.y = originY;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitLeft<=translatePos.x) {
+        translatePos.x = originX;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitRight>=(translatePos.x+(scaleFactor*canvas.width))) {
+        translatePos.x = originX;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }else if(limitBottom>=(translatePos.y+(scaleFactor*limitBottom))) {
+        translatePos.y = originY;
+        drag(translatePos);
+        trackTransforms(translatePos.x, translatePos.y, translatePos.x+(scaleFactor*canvas.width), translatePos.y+(scaleFactor*canvas.height));
+    }
+    else{
+        translatePos.x = originX;
+        translatePos.y = originY;
+    }
+};
+
+// --- Drag Controls for mouse
+topControl.addEventListener('mousemove', function(event) {
+    mouseX = event.offsetX || (event.pageX - topControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - topControl.offsetTop);
+});
+
+topControl.addEventListener('mousedown', function(event) {
+    event.preventDefault();
+    mouseX = event.offsetX || (event.pageX - topControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - topControl.offsetTop);
+    $(this).hide();
+    activeDragControl = "top";
+});
+
+leftControl.addEventListener('mousemove', function(event) {
+    mouseX = event.offsetX || (event.pageX - leftControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - leftControl.offsetTop);    
+});
+
+leftControl.addEventListener('mousedown', function(event) {
+    event.preventDefault();
+    mouseX = event.offsetX || (event.pageX - leftControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - leftControl.offsetTop);
+    $(this).hide();
+    activeDragControl = " left";
+});
+
+rightControl.addEventListener('mousemove', function(event) {
+    mouseX = event.offsetX || (event.pageX - rightControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - rightControl.offsetTop);
+});
+
+rightControl.addEventListener('mousedown', function(event) {
+    event.preventDefault();
+    mouseX = event.offsetX || (event.pageX - rightControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - rightControl.offsetTop);
+    $(this).hide();
+    activeDragControl = "right";
+});
+
+bottomControl.addEventListener('mousemove', function(event) {
+    mouseX = event.offsetX || (event.pageX - bottomControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - bottomControl.offsetTop);
+});
+
+bottomControl.addEventListener('mousedown', function(event) {
+    event.preventDefault();
+    mouseX = event.offsetX || (event.pageX - bottomControl.offsetLeft);
+    mouseY = event.offsetY || (event.pageY - bottomControl.offsetTop);
+    $(this).hide();
+    activeDragControl = "bottom";
 });
