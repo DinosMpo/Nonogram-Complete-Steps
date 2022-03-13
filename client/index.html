@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="css/level.css">
 	<link rel="stylesheet" type="text/css" href="css/tools.css">
 	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/multiplayer.css">
 </head>
 <body>
 	<div id="screen">
@@ -91,9 +92,21 @@
 
 			    <div id="close-instructions">X</div>
 	        </div>
+	        <!-- Clients count -->
+	        <div id="clients-count"></div>
+	        <!-- Game lobbie for multiplayer -->
+			<div id="game-lobbie">
+			    <h3>Multiplayer</h3>
+			    <div id="msg">Searching for player...</div>
+			    <div class="lds-ellipsis">
+			        <div></div><div></div><div></div><div></div>
+			    </div>
+			    <div id="exit-multiplayer-waiting-lobby">Exit</div>
+			</div>
 	    </div>
 	</div>
 
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="js/jquery-3.1.1.js"></script>
 	<script src="js/nonogram.js"></script>
 	<script src="js/nonogram.drawing.js"></script>
@@ -105,5 +118,6 @@
 	<script src="js/store.js"></script>
 	<script src="js/main-menu.js"></script>
 	<script src="js/tools.js"></script>
+	<script src="js/nonogram.multiplayer.js"></script>
 </body>
 </html>

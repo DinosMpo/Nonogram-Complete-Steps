@@ -168,3 +168,17 @@ body {
   padding: 0 auto;
   text-align: center;
 }
+
+#clients-count {
+  display: block;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  font-weight: bold;
+  font-size: 30px;
+  font-family: Arial;
+  background: #826e6e;
+  color: white;
+  border: 3px solid black;
+  padding: 5px;
+}

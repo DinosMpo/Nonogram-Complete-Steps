@@ -60,3 +60,15 @@ for(let i=0; i<allStages.length; i++) {
             $(".correct-" + allStages[i]).show();
     }
 }
+
+$('#multiplayer').click(function() {
+    $('#menu').hide();
+    $('#game-lobbie').show();
+    sock.emit('multiplayer', "User looking for a team mate");
+});
+
+$('#exit-multiplayer-waiting-lobby').click(function() {
+    $('#menu').show();
+    $('#game-lobbie').hide();
+    sock.emit('exit multiplayer waiting lobby', 'Player left the lobby');
+});
