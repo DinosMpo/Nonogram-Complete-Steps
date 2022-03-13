@@ -66,6 +66,57 @@ for (let i = 0; i < singleplayerTools.length; i++) {
   });
 }
 
+function createMultiPlayerTools() {
+    const multiPlayerTools = ['default', 'black', 'x', 'white'];
+    const multiPlayerExtraTools = ['home'];
+    const tools = document.getElementById("tools");
+    const multiplayer = document.createElement('div');
+    multiplayer.id = "multiplayer-tools";
+    tools.appendChild(multiplayer);
+
+    for(let i=0; i<multiPlayerTools.length; i++) {
+        var li = document.createElement('li');
+        li.classList.add("tool");
+        var div = document.createElement('div');
+        div.className = multiPlayerTools[i];
+        var img = document.createElement('img');
+        img.src = "img/" + multiPlayerTools[i] + ".png";
+        div.appendChild(img);
+        li.appendChild(div);
+        multiplayer.appendChild(li);
+    }
+
+    for(let i=0; i<multiPlayerExtraTools.length; i++) {
+        var li = document.createElement('li');
+        li.classList.add("tool");
+        var div = document.createElement('div');
+        div.className = multiPlayerExtraTools[i];
+        var img = document.createElement('img');
+        img.src = "img/" + multiPlayerExtraTools[i] + ".png";
+        div.appendChild(img);
+        li.appendChild(div);
+        multiplayer.appendChild(li);
+    }
+    multiplayer.firstElementChild.classList.add("active");
+};
+
+createMultiPlayerTools();
+
+let multiplayer = document.getElementById("multiplayer-tools");
+let multiplayerTools = multiplayer.getElementsByClassName("tool");
+
+for (let i = 0; i < multiplayerTools.length; i++) {
+  multiplayerTools[i].addEventListener("click", function() {
+    let current = multiplayer.getElementsByClassName("active");
+    
+    if(typeof current[0] !== 'undefined') {
+        current[0].className = current[0].className.replace(" active", "");
+    }
+    
+    this.className += " active";
+  });
+}
+
 function resetTools(toolContainer) {
   let singleplayer = document.getElementById("singleplayer-tools");
   let currentTool;
@@ -279,6 +330,16 @@ $(".help").click(function() {
 });
 
 $(".home").click(function(){
+    if(state == "multiplayer") {
+        if(turn === false) {
+            $("#waiting-screen").hide();
+        }
+        sock.emit('exit-multiplayer', multiplayerGame);
+        currentLevel = "none";
+        turn = false;
+        wait = false;
+    }
+
     $("#container-tools").hide();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     container.style.transform = "none";
@@ -289,6 +350,13 @@ $(".home").click(function(){
     canvas.style.border = "none";
     state = "menu";
     $("#menu").show();
+    $("#clients-count").show();
+    if($('#top').show()) {
+        $('#top').hide();
+        $('#bottom').hide();
+        $('#left').hide();
+        $('#right').hide();
+    }
 });
 
 $('#restart').click(function() {
@@ -334,3 +402,4 @@ $("#continueGame").click(function(){
     $("#correct-singleplayer").hide();
     $("#levels").show();
 });
+

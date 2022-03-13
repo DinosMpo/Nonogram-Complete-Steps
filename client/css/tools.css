@@ -20,6 +20,10 @@
   display: none;
 }
 
+#multiplayer-tools {
+  display: none;
+}
+
 .tool, .extra-tool{
   display: list-item;
   float: left;
