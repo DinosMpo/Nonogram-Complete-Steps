@@ -103,6 +103,32 @@
 			    </div>
 			    <div id="exit-multiplayer-waiting-lobby">Exit</div>
 			</div>
+			<!-- Correct for multiplayer-->
+			<div id="correct-multiplayer" class="black-screen">
+			    <div id="correct-popup">
+			        <h2>Correct !</h2>
+			        <img src="img/green-button.png" style="width:60px; height:60px; margin: 0 auto;">
+			        <div id="next-stage">
+			            <h3>Next stage?</h3>
+			            <div id="choices">
+			                <div class="player-choice">
+			                    Player 1
+			                    <div id="player1-choice" class="choice"></div>
+			                </div>
+			                <div id="player-choice" class="player-choice">
+			                    Player 2
+			                    <div id="player2-choice" class="choice"></div>
+			                </div>
+			            </div>
+			            <div id="votes">
+			                <div id="yes" class="vote">YES</div>
+			                <div id="no" class="vote">NO</div>
+			            </div>
+			        </div>
+
+			        <p id="exit-multiplayer">Exit</p>
+			    </div>
+			</div>
 	    </div>
 	</div>
 
@@ -119,5 +145,6 @@
 	<script src="js/main-menu.js"></script>
 	<script src="js/tools.js"></script>
 	<script src="js/nonogram.multiplayer.js"></script>
+	<script src="js/multiplayerStages.js"></script>
 </body>
 </html>
