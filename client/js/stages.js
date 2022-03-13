@@ -138,6 +138,7 @@ function createLevel(level, stage) {
     $("#info-current-progress").text(nonogram.findProgress() + "%");
     limitBottom = nonogram.height-myLimit;
     limitRight = nonogram.width-myLimit;
+    $("#clients-count").hide();
 }
 
 let stages5x5 = document.getElementById('levels5x5');
