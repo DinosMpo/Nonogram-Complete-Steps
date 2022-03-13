@@ -406,3 +406,32 @@ Nonogram.prototype.redrawProgress = function() {
    ctx.closePath();
    ctx.stroke();
 };
+
+Nonogram.prototype.strokeTeamMateChoice = function(cell) {
+    if(this.previousTeamMateChoice.active) {
+        ctx.beginPath();
+        for(let i=0; i<this.previousTeamMateChoice.cell.length; i++) {
+            if(this.previousTeamMateChoice.cell[i].value === 1) {
+                this.drawWhiteCell(this.previousTeamMateChoice.cell[i]);
+                this.drawBlackCell(this.previousTeamMateChoice.cell[i]);
+            }else if(this.previousTeamMateChoice.cell[i].value === 2) {
+                this.drawWhiteCell(this.previousTeamMateChoice.cell[i]);
+                this.drawXCell(this.previousTeamMateChoice.cell[i]);
+            }else{
+                ctx.fillStyle = "white";
+                ctx.fillRect(this.previousTeamMateChoice.cell[i].x + 2,
+                                this.previousTeamMateChoice.cell[i].y + 2,
+                                this.previousTeamMateChoice.cell[i].w - 4,
+                                this.previousTeamMateChoice.cell[i].h - 4);
+            }
+        }
+        ctx.stroke();
+        ctx.closePath();
+        this.previousTeamMateChoice.cell = [];
+    }
+    this.previousTeamMateChoice.cell.push(cell);
+    this.previousTeamMateChoice.active = true;
+    ctx.strokeStyle = "#0099ff";
+    ctx.lineWidth   = 4;
+    ctx.strokeRect(cell.x+5, cell.y+5, this.blockSize-10, this.blockSize-10);
+};
