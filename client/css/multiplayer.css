@@ -243,3 +243,15 @@
     margin: 0 auto;
     padding: 10px;
 }
+
+#waiting-screen, #player-left {
+    display: none;
+    color: white;
+}
+
+#waiting-screen h1 {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}
