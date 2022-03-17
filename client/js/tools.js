@@ -118,16 +118,22 @@ for (let i = 0; i < multiplayerTools.length; i++) {
 }
 
 function resetTools(toolContainer) {
-  let singleplayer = document.getElementById("singleplayer-tools");
-  let currentTool;
-  let tools;
+    let singleplayer = document.getElementById("singleplayer-tools");
+    let multiplayer = document.getElementById("multiplayer-tools");
+    let currentTool;
+    let tools;
 
-  if(toolContainer === "singleplayer") {
-    currentTool = singleplayer.getElementsByClassName("active");
-    tools = singleplayer.getElementsByClassName("tool");
-    currentTool[0].className = currentTool[0].className.replace(" active", "");
-    tools[0].className += " active";
-  }
+    if(toolContainer === "singleplayer") {
+        currentTool = singleplayer.getElementsByClassName("active");
+        tools = singleplayer.getElementsByClassName("tool");
+        currentTool[0].className = currentTool[0].className.replace(" active", "");
+        tools[0].className += " active";
+    }else if(toolContainer === "multiplayer") {
+        currentTool = multiplayer.getElementsByClassName("active");
+        tools = multiplayer.getElementsByClassName("tool");
+        currentTool[0].className = currentTool[0].className.replace(" active", "");
+        tools[0].className += " active";
+    }
 }
 
 $(".default").click(function(){
