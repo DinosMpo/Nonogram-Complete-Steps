@@ -133,7 +133,7 @@ sock.on('player-left', (data) => {
     sock.emit('player-left');
 });
 
-sock.on('update', () => {
+sock.on('update', (data) => {
     ctx.save();
     ctx.translate(originX,originY);
     ctx.scale(scaleFactor,scaleFactor);
@@ -177,6 +177,13 @@ sock.on('update', () => {
                 nonogram.strokeTeamMateChoice(nonogram.emptyGrid[data.cell]);
                 nonogram.drawPreview(nonogram.emptyGrid[data.cell]);
             }
+        }else if(data.fillCellChoice === "white") {
+            nonogram.emptyGrid[data.cell].value = data.value;
+            if(nonogram.emptyGrid[data.cell].value === 0) {
+                nonogram.drawWhiteCell(nonogram.emptyGrid[data.cell]);
+                nonogram.strokeTeamMateChoice(nonogram.emptyGrid[data.cell]);
+                nonogram.drawPreview(nonogram.emptyGrid[data.cell]);
+            }
         }else if(data.dataType === "fill cell row numbers grid") {
             nonogram.rowNumbersGrid[data.cell].value = data.value;
             ctx.lineWidth = 3;
@@ -198,20 +205,20 @@ sock.on('update', () => {
             nonogram.columnNumbersGrid[data.cell].value = data.value;
             ctx.lineWidth = 3;
             ctx.beginPath();
+            if(nonogram.columnNumbersGrid[data.cell].value === 1) {
+                ctx.strokeStyle = "red";
+                ctx.moveTo(nonogram.columnNumbersGrid[data.cell].x+3, (nonogram.columnNumbersGrid[data.cell].y + nonogram.blockSize)-3);
+                ctx.lineTo((nonogram.columnNumbersGrid[data.cell].x + nonogram.blockSize)-3, nonogram.columnNumbersGrid[data.cell].y+3);
+            }else{
+                ctx.fillStyle = "#e0e0d1";
+                ctx.fillRect(nonogram.columnNumbersGrid[data.cell].x+2, nonogram.columnNumbersGrid[data.cell].y+2, nonogram.columnNumbersGrid[data.cell].w-3, nonogram.columnNumbersGrid[data.cell].h-3);
+                ctx.fillStyle = "black";
+                ctx.font = "bold " + (nonogram.blockSize / 2) + "px Arial";
+                ctx.fillText(nonogram.columnNumbersGrid[data.cell].number, (nonogram.columnNumbersGrid[data.cell].x) + (nonogram.blockSize/3), (nonogram.columnNumbersGrid[data.cell].y) + ((nonogram.blockSize+8)/2));
+            }
+            ctx.stroke();
+            ctx.closePath();
         }
-        if(nonogram.columnNumbersGrid[data.cell].value === 1) {
-            ctx.strokeStyle = "red";
-            ctx.moveTo(nonogram.columnNumbersGrid[data.cell].x+3, (nonogram.columnNumbersGrid[data.cell].y + nonogram.blockSize)-3);
-            ctx.lineTo((nonogram.columnNumbersGrid[data.cell].x + nonogram.blockSize)-3, nonogram.columnNumbersGrid[data.cell].y+3);
-        }else{
-            ctx.fillStyle = "#e0e0d1";
-            ctx.fillRect(nonogram.columnNumbersGrid[data.cell].x+2, nonogram.columnNumbersGrid[data.cell].y+2, nonogram.columnNumbersGrid[data.cell].w-3, nonogram.columnNumbersGrid[data.cell].h-3);
-            ctx.fillStyle = "black";
-            ctx.font = "bold " + (nonogram.blockSize / 2) + "px Arial";
-            ctx.fillText(nonogram.columnNumbersGrid[data.cell].number, (nonogram.columnNumbersGrid[data.cell].x) + (nonogram.blockSize/3), (nonogram.columnNumbersGrid[data.cell].y) + ((nonogram.blockSize+8)/2));
-        }
-        ctx.stroke();
-        ctx.closePath();
     }
     ctx.restore();
     $("#info-current-progress").text("");
