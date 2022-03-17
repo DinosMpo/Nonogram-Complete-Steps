@@ -253,11 +253,7 @@ Nonogram.prototype.strokeCurrentChoice = function(cell) {
                 this.drawWhiteCell(this.previousChoice.cell[i]);
                 this.drawXCell(this.previousChoice.cell[i]);
             }else{
-                ctx.fillStyle = "white";
-                ctx.fillRect(this.previousChoice.cell[i].x + 2,                                                                     
-                   this.previousChoice.cell[i].y + 2, 
-                   this.previousChoice.cell[i].w - 4, 
-                   this.previousChoice.cell[i].h - 4);
+                this.drawWhiteCell(this.previousChoice.cell[i]);
             }
         }
         ctx.stroke();
