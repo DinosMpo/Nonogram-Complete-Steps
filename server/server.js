@@ -25,12 +25,6 @@ io.on('connection', (sock) => {
 
 	sock.join('all');
 
-	sock.on('disconnect', () => {
-		console.log('user disconnect');
-		clients --;
-		io.sockets.emit('refresh counter', { description: 'Players online: ' + clients });
-	});
-
 	//Message to all connected clients
     io.sockets.emit('refresh counter', { description: 'Players online: ' + clients});
 
@@ -122,6 +116,11 @@ io.on('connection', (sock) => {
 		io.nsps['/'].sockets[sock.id].leave('room-'+inRoom);
 		io.nsps['/'].sockets[sock.id].join('all');
     });
+
+    sock.on('end-turn', () => {
+	    sock.emit('end-turn');
+	    sock.to("room-"+inRoom).broadcast.emit('your turn to play');
+	});
 });
 
 server.on('error', (err) => {
