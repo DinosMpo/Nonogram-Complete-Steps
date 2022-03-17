@@ -134,7 +134,7 @@ function resetTools(toolContainer) {
         currentTool[0].className = currentTool[0].className.replace(" active", "");
         tools[0].className += " active";
     }
-}
+};
 
 $(".default").click(function(){
     if(nonogram.fillCellChoice !== "default") {
