@@ -72,3 +72,18 @@ $('#exit-multiplayer-waiting-lobby').click(function() {
     $('#game-lobbie').hide();
     sock.emit('exit multiplayer waiting lobby', 'Player left the lobby');
 });
+
+$('#close-multiplayer').click(function() {
+    $("#container-tools").hide();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    container.style.transform = "none";
+    container.style.left = "0%";
+    container.style.top = "0%";
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    canvas.style.border = "none";
+    state = "menu";
+    $("#multiplayer-finished-popup").hide();
+    $("#menu").show();
+    $("#clients-count").show();
+});

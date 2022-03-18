@@ -1,4 +1,6 @@
 const sock = io();
+let player1Choice;
+let player2Choice;
 
 //Client Counter
 sock.on('refresh counter', (data) => {
@@ -16,7 +18,7 @@ $('#yes').click(function() {
     }else if(player == 'player2Choice') {
         player2Choice = 'yes';
     }
-    sock.emit('choice', data);
+    sock.emit('play next level', data);
 });
 
 $('#no').click(function() {
@@ -30,7 +32,7 @@ $('#no').click(function() {
     }else if(player == 'player2Choice') {
         player2Choice = 'no';
     }
-    sock.emit('choice', data);
+    sock.emit('play next level', data);
 });
 
 $("#exit-multiplayer").click(function(){
@@ -225,7 +227,7 @@ sock.on('update', (data) => {
     $("#info-current-progress").text(nonogram.findProgress() + "%");
 });
 
-sock.on('choice', (data) => {
+sock.on('play next level', (data) => {
     if(data.player == "player1") {
         player1Choice = data.choice;
         if(player1Choice == 'yes') {
