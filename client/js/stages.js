@@ -133,6 +133,7 @@ function createLevel(level, stage) {
         $("#correct-level-tools").show();
     }
     resetTools("singleplayer");
+    $("#multiplayer-tools").hide();
     $("#singleplayer-tools").show();
     $("#info-current-progress").text("");
     $("#info-current-progress").text(nonogram.findProgress() + "%");
