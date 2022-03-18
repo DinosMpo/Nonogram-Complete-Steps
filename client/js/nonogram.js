@@ -217,4 +217,8 @@ function Nonogram(levelGrid) {
 		}
 	}
 	
+	this.previousTeamMateChoice = {
+		active: false
+	};
+	this.previousTeamMateChoice.cell = [];
 };

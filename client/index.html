@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="css/level.css">
 	<link rel="stylesheet" type="text/css" href="css/tools.css">
 	<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/multiplayer.css">
 </head>
 <body>
 	<div id="screen">
@@ -19,6 +20,16 @@
 				<div id="left"><img src="img/top_down.png"></div>
 				<div id="right"><img src="img/top_down.png"></div>
 				<div id="bottom"><img src="img/left_right.png"></div>
+				<div id="player-left" class="black-screen">
+				    <div id="player-left-popup">
+				        <h3 id="player-left-info"></h3>
+				        <img src="img/exit.png">
+				        <p id="player-left-exit-to-menu">Exit to menu</p>
+				    </div>
+				</div>
+				<div id="waiting-screen" class="black-screen">
+					<h1>Wait your turn..</h1>
+				</div>
 				<div id="container-tools">
 					<ul id="tools"></ul>
 					<div id="info-right">
@@ -91,9 +102,64 @@
 
 			    <div id="close-instructions">X</div>
 	        </div>
+	        <!-- Clients count -->
+	        <div id="clients-count"></div>
+	        <!-- Game lobbie for multiplayer -->
+			<div id="game-lobbie">
+			    <h3>Multiplayer</h3>
+			    <div id="msg">Searching for player...</div>
+			    <div class="lds-ellipsis">
+			        <div></div><div></div><div></div><div></div>
+			    </div>
+			    <div id="exit-multiplayer-waiting-lobby">Exit</div>
+			</div>
+			<!-- Correct for multiplayer-->
+			<div id="correct-multiplayer" class="black-screen">
+			    <div id="correct-popup">
+			        <h2>Correct !</h2>
+			        <img src="img/green-button.png" style="width:60px; height:60px; margin: 0 auto;">
+			        <div id="next-stage">
+			            <h3>Next stage?</h3>
+			            <div id="choices">
+			                <div class="player-choice">
+			                    Player 1
+			                    <div id="player1-choice" class="choice"></div>
+			                </div>
+			                <div id="player-choice" class="player-choice">
+			                    Player 2
+			                    <div id="player2-choice" class="choice"></div>
+			                </div>
+			            </div>
+			            <div id="votes">
+			                <div id="yes" class="vote">YES</div>
+			                <div id="no" class="vote">NO</div>
+			            </div>
+			        </div>
+
+			        <p id="exit-multiplayer">Exit</p>
+			    </div>
+			</div>
+			<!-- Next stage for multiplayer -->
+			<div id="multiplayer-next-stage-popup" class="black-screen">
+				<div id="multiplayer-next-stage">
+					<h2>Creating next stage...</h2>
+					<p>Please wait</p>
+					<p id="next-stage"></p>
+				</div>
+			</div>
+			<!-- Multiplayer finished -->
+			<div id="multiplayer-finished-popup" class="black-screen">
+				<div id="multiplayer-finished">
+					<h1>Congratulation!!</h1>
+					<p>You finished the multiplayer!</p>
+					<p>Thanks for playing</p>
+					<div id="close-multiplayer">Exit</div>
+				</div>
+			</div>
 	    </div>
 	</div>
 
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="js/jquery-3.1.1.js"></script>
 	<script src="js/nonogram.js"></script>
 	<script src="js/nonogram.drawing.js"></script>
@@ -105,5 +171,7 @@
 	<script src="js/store.js"></script>
 	<script src="js/main-menu.js"></script>
 	<script src="js/tools.js"></script>
+	<script src="js/nonogram.multiplayer.js"></script>
+	<script src="js/multiplayerStages.js"></script>
 </body>
 </html>

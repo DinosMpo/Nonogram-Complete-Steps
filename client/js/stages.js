@@ -133,11 +133,13 @@ function createLevel(level, stage) {
         $("#correct-level-tools").show();
     }
     resetTools("singleplayer");
+    $("#multiplayer-tools").hide();
     $("#singleplayer-tools").show();
     $("#info-current-progress").text("");
     $("#info-current-progress").text(nonogram.findProgress() + "%");
     limitBottom = nonogram.height-myLimit;
     limitRight = nonogram.width-myLimit;
+    $("#clients-count").hide();
 }
 
 let stages5x5 = document.getElementById('levels5x5');
