@@ -80,6 +80,7 @@ function xRect(x, y, w, h, dx, textSize) {
     this.h = h;
     this.dx = dx;
     this.textSize = textSize;
+
     this.draw = function() {
         ctx.beginPath();
         ctx.font = textSize +"px Arial";
@@ -88,6 +89,7 @@ function xRect(x, y, w, h, dx, textSize) {
         ctx.stroke();
         ctx.fill();
     }
+
     this.update = function() {
         if(this.y + this.w > innerHeight || this.y < 0){
             this.dx = -this.dx;
@@ -95,7 +97,8 @@ function xRect(x, y, w, h, dx, textSize) {
         this.y += this.dx;
         this.draw();
     }
-    this.relocate = function() {
+
+    this.relocate = function(x, y) {
         this.x = x;
         this.y = y;
     }
@@ -192,3 +195,86 @@ function animate() {
 }
 
 setInterval(animate, 1000/50);
+
+//Window resize
+$(window).resize( () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    if(state === 'menu') {
+        ctx.drawImage(img, (innerWidth/2)-(img.width/2), (innerHeight/2)-(img.height/2));
+        introScreenLogo.draw();
+        for(let i=0; i<30; i++) {
+            blackRectArray[i].relocate(Math.random() * (innerWidth - blackRectArray[i].w * 2) + blackRectArray[i].w, Math.random() * (innerHeight - blackRectArray[i].w * 2) + blackRectArray[i].w);
+            whiteRectArray[i].relocate(Math.random() * (innerWidth - whiteRectArray[i].w * 2) + whiteRectArray[i].w, Math.random() * (innerHeight - whiteRectArray[i].w * 2) + whiteRectArray[i].w);
+            xRectArray[i].relocate(Math.random() * (innerWidth - xRectArray[i].w * 2) + xRectArray[i].w, Math.random() * (innerHeight - xRectArray[i].w * 2) + xRectArray[i].w);
+            blackRectArray[i].update();
+            whiteRectArray[i].update();
+            xRectArray[i].update();
+        }
+    }else if(state === 'level') {
+        if(window.innerHeight > 0 && window.innerWidth > 0) {
+            nonogram.relocate();
+            nonogram.findUserChoices();
+            ctx.save();
+            ctx.translate(originX,originY);
+            ctx.scale(scaleFactor,scaleFactor);
+            nonogram.retrieveProgress(retrieve(currentStage), retrieve('rowNumbersGrid-'+currentStage),retrieve('columnNumbersGrid-'+currentStage));
+            nonogram.redrawProgress();
+            ctx.restore();
+            limitBottom = nonogram.height-myLimit;
+            limitRight = nonogram.width-myLimit;
+        }
+    }else if(state === "multiplayer") {
+        if(window.innerHeight > 0 && window.innerWidth > 0) {
+            nonogram.relocate();
+            nonogram.findUserChoices();
+            ctx.save();
+            ctx.translate(originX,originY);
+            ctx.scale(scaleFactor,scaleFactor);
+            nonogram.redrawProgress();
+            nonogram.strokeTeamMateChoice();
+            ctx.restore();
+            limitBottom = nonogram.height-myLimit;
+            limitRight = nonogram.width-myLimit;
+        }
+    }
+    //Change the size of the image
+    if(window.innerHeight >= 753) {
+        if(window.innerWidth >= 999) {
+            img.src = "img/nono_1000X753.png";
+        }else if(window.innerWidth < 999 && window.innerWidth >= 719) {
+            img.src = "img/nono_720X542.png";
+        }else if(window.innerWidth < 719 && window.innerWidth >= 480) {
+            img.src = "img/nono_480X361.png";
+        }else if(window.innerWidth < 480 && window.innerWidth >= 360) {
+            img.src = "img/nono_360X271.png";
+        }else if(window.innerWidth < 360 && window.innerWidth >= 304) {
+            img.src = "img/nono_304X229.png";
+        }
+    }else if(window.innerHeight < 753 && window.innerHeight >= 543) {
+        if(window.innerWidth >= 719) {
+            img.src = "img/nono_720X542.png";
+        }else if(window.innerWidth < 719 && window.innerWidth >= 480) {
+            img.src = "img/nono_480X361.png";
+        }else if(window.innerWidth < 480 && window.innerWidth >= 360) {
+            img.src = "img/nono_360X271.png";
+        }else if(window.innerWidth < 360 && window.innerWidth >= 304) {
+            img.src = "img/nono_304X229.png";
+        }
+    }else if(window.innerHeight < 543 && window.innerHeight >= 360) {
+        if(window.innerWidth >= 480) {
+            img.src = "img/nono_480X361.png";
+        }else if(window.innerWidth < 480 && window.innerWidth >= 360) {
+            img.src = "img/nono_360X271.png";
+        }else if(window.innerWidth < 360 && window.innerWidth >= 304) {
+            img.src = "img/nono_304X229.png";
+        }
+    }else if(window.innerHeight < 360) {
+        if(window.innerWidth >= 360) {
+            img.src = "img/nono_360X271.png";
+        }else if(window.innerWidth < 360 && window.innerWidth >= 304) {
+            img.src = "img/nono_304X229.png";
+        }
+    }
+});
