@@ -221,4 +221,67 @@ function Nonogram(levelGrid) {
 		active: false
 	};
 	this.previousTeamMateChoice.cell = [];
+
+	this.relocate = function() {
+		windowWidth = window.innerWidth;
+		windowHeight = window.innerHeight;
+		if(windowWidth > windowHeight) {
+			if(windowHeight > 359) {
+				size = windowHeight - 50;
+			}else{
+				size = windowHeight;
+			}
+		}else{
+			size = windowWidth;
+		}
+		this.blockSize = Math.floor((size / maxSize) - 1);
+		this.width = (this.levelGrid[0].length + this.maxRowNumberSize) * this.blockSize;
+		this.height = (this.levelGrid.length + this.maxColumnNumberSize) * this.blockSize;
+		canvas.width = this.width;
+		canvas.height = this.height;
+		ctx.save();
+		ctx.translate(originX,originY);
+		ctx.scale(scaleFactor,scaleFactor);
+		this.drawGrid();
+		ctx.restore();
+		//---recalibrate the coordinates of every cell
+		var indexCells = 0;
+		for (var i = (this.maxColumnNumberSize ) * this.blockSize; i < this.height; i += this.blockSize ) {
+			for ( var y = (this.maxRowNumberSize ) * this.blockSize; y < this.width; y += this.blockSize ) {
+				this.emptyGrid[indexCells].w = this.blockSize;
+				this.emptyGrid[indexCells].h = this.blockSize;
+				this.emptyGrid[indexCells].x = y;
+				this.emptyGrid[indexCells].y = i;
+				indexCells++;
+			}
+		}
+		//Cell numbers of every row
+		var indexRow = 0;
+		for (var i = 0; i < this.rowNumbers.length; i ++) {
+			for ( var y = 0; y < this.rowNumbers[i].length; y ++) {
+				this.rowNumbersGrid[indexRow].w = this.blockSize;
+				this.rowNumbersGrid[indexRow].h = this.blockSize;
+				this.rowNumbersGrid[indexRow].x = (y * this.blockSize);
+				this.rowNumbersGrid[indexRow].y = ( (this.maxColumnNumberSize) * this.blockSize) + (i * this.blockSize);
+				indexRow++;
+			}
+		}
+		//Cell numbers of every column
+		var indexColumn = 0;
+		for (var i = 0; i < this.columnNumbers.length; i ++) {
+			for ( var y = 0; y < this.columnNumbers[i].length; y ++) {
+				this.columnNumbersGrid[indexColumn].w = this.blockSize;
+				this.columnNumbersGrid[indexColumn].h = this.blockSize;
+				this.columnNumbersGrid[indexColumn].x = ((this.maxRowNumberSize) * this.blockSize) + (i * this.blockSize);
+				this.columnNumbersGrid[indexColumn].y = (y * this.blockSize);
+				indexColumn++;
+			}
+		}
+		ctx.save();
+		ctx.translate(originX,originY);
+		ctx.scale(scaleFactor,scaleFactor);
+		this.drawRowNumbers();
+		this.drawColumnNumbers();
+		ctx.restore();
+	};
 };
