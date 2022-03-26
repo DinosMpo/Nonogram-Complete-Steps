@@ -6,8 +6,8 @@
     text-align: center;
     margin: 0 auto;
     top: 40%;
-    transform: translateX(-50%);
     left: 50%;
+    transform: translate(-50%, -40%);
     background: #826e6e;
     font-weight: bold;
     font-size: 25px ;
@@ -99,14 +99,14 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -52px;
-  margin-top: -50px;
+  transform: translate(-50%, -50%);
   text-align: center;
   background: linear-gradient(to bottom right, #e0e0d1, white,  #999966);
   border: 2px solid black;
   border-radius: 30px;
   padding: 10px;
   box-shadow: 1px 3px 5px grey;
+  min-width: 200px;
 }
 
 #correct-multiplayer-popup p {
@@ -137,18 +137,16 @@
 #multiplayer-next-stage {
     position: absolute;
     padding: 10px;
-    /*margin-left: -52px;*/
-    margin-top: -50px;
     top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    height: auto;
+    transform: translate(-50%, -50%);
+    min-width: 300px;
     text-align: center;
     background: linear-gradient(to bottom right, #e0e0d1, white,  #999966);
     border: 2px solid black;
     border-radius: 30px;
-    box-shadow: 1px 3px 5px grey;    
+    box-shadow: 1px 3px 5px grey;
+    font-size: 13px;   
 }
 
 #multiplayer-next-stage-popup h2 {
@@ -208,17 +206,18 @@
 }
 
 #player-left-popup {
-    position: absolute;
+    position: relative;
     text-align: center;
     background: linear-gradient(to bottom right, #e0e0d1, white,  #999966);
     border: 2px solid black;
     border-radius: 30px;
     padding: 10px;
     box-shadow: 1px 3px 5px grey;
-    width: 20%;
-    top: 40%;
+    width: 230px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform:  translate(-50%, -50%);
+    font-size:  22px;
 }
 
 #player-left-info {
@@ -244,16 +243,14 @@
     padding: 10px;
 }
 
-#waiting-screen, #player-left {
+#waiting-screen {
     display: none;
     color: white;
 }
 
 #waiting-screen h1 {
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
+    text-align: center;
+    margin-top: 58%;
 }
 
 #multiplayer-finished-popup {

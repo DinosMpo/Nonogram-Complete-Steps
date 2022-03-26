@@ -1,13 +1,12 @@
 #levels {
   display: none;
   border: 3px solid black;
-  border-radius: 25px;
   position: absolute;
   text-align: center;
   margin: 0 auto;
-  top: 30%;
-  transform: translateX(-50%);
+  top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   background: #826e6e;
   font-weight: bold;
   font-size: 25px;
@@ -48,10 +47,6 @@
   border: 3px solid black;
   position: absolute;
   text-align: center;
-  margin: 2px; /*gt to xw auto?*/
-  top: 30%;
-  transform: translateX(-50%);
-  left: 50%;
   background: #826e6e;
   font-weight: bold;
   font-size: 25px;
@@ -94,6 +89,9 @@
 
 #levels5x5, #levels10x10, #levels15x15 {
   display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #close-levels5x5, #close-levels10x10, #close-levels15x15 {
