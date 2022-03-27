@@ -28,8 +28,8 @@ function handleScroll(value) {
   if(value == -3 || value == -100) { //zoom in
     if(scaleFactor < 2.5) {
       scaleFactor += 0.1;
-       translatePos.x = mouseX;
-      translatePos.y = mouseY;
+       translatePos.x = (mouseX-originX)/scaleFactor;
+      translatePos.y = (mouseY-originY)/scaleFactor;
        zoom(scaleFactor, translatePos);
        translatePos.x = -((scaleFactor*translatePos.x)-translatePos.x);
        translatePos.y = -((scaleFactor*translatePos.y)-translatePos.y);
@@ -42,8 +42,8 @@ function handleScroll(value) {
   }else if(value == 3 || value == 100) { //zoom out
     if(scaleFactor > 1) {
       scaleFactor -= 0.1;
-       translatePos.x = mouseX;
-       translatePos.y = mouseY;
+       translatePos.x = (mouseX-originX)/scaleFactor;
+       translatePos.y = (mouseY-originY)/scaleFactor;
        zoom(scaleFactor, translatePos);
        translatePos.x = -((scaleFactor*translatePos.x)-translatePos.x);
        translatePos.y = -((scaleFactor*translatePos.y)-translatePos.y);
