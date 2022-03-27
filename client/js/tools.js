@@ -407,5 +407,6 @@ $("#continueGame").click(function(){
     state = "menu";
     $("#correct-singleplayer").hide();
     $("#levels").show();
+    $("#clients-count").show();
 });
 
