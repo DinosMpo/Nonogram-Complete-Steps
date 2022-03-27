@@ -117,6 +117,7 @@ $('#player-left-exit-to-menu').click( () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     container.style.transform = "none";
     container.style.left = "0%";
+    container.style.top = "0%";
     canvas.width = innerWidth;
     canvas.height = innerHeight;
     canvas.style.border = "none";
