@@ -240,3 +240,144 @@ bottomControl.addEventListener('mousedown', function(event) {
     $(this).hide();
     activeDragControl = "bottom";
 });
+
+// --- Drag Controls for touch
+let touchDragStartX = 0;
+let touchDragStartY = 0;
+
+leftControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+leftControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "left";
+});
+
+leftControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
+});
+
+topControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+topControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "top";
+});
+
+topControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
+});
+
+rightControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+rightControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "right";
+});
+
+rightControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
+});
+
+
+bottomControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+bottomControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "bottom";
+});
+
+bottomControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
+});
