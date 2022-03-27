@@ -33,17 +33,34 @@ Nonogram.prototype.drawGrid = function() {
 Nonogram.prototype.drawRowNumbers = function() {
 	ctx.fillStyle = 'black';
 	for(var i=0; i<this.rowNumbersGrid.length; i++) {
-		ctx.font = "bold " + (this.blockSize/2)+"px Arial";
-		ctx.fillText(this.rowNumbersGrid[i].number, (this.rowNumbersGrid[i].x)+(this.blockSize/3), (this.rowNumbersGrid[i].y)+((this.blockSize+8)/2));
-		console.log(4);
+		if(this.rowNumbersGrid[i].number < 10) {
+			ctx.font = (this.blockSize)+"px Arial";
+			ctx.fillText(this.rowNumbersGrid[i].number,
+			(this.rowNumbersGrid[i].x+(Math.floor(this.blockSize/4))),
+			(this.rowNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/6))));
+		}else{
+			ctx.font = (this.blockSize-3)+"px Arial";
+			ctx.fillText(this.rowNumbersGrid[i].number,
+			(this.rowNumbersGrid[i].x),
+			(this.rowNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/5))));
+		}
 	}
 };
 
 Nonogram.prototype.drawColumnNumbers = function() {
     ctx.fillStyle = 'black';
     for (var i = 0; i < this.columnNumbersGrid.length; i++) {
-        ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
-        ctx.fillText(this.columnNumbersGrid[i].number, (this.columnNumbersGrid[i].x)+(this.blockSize/3), (this.columnNumbersGrid[i].y)+((this.blockSize+8)/2));
+    	if(this.columnNumbersGrid[i].number < 10) {
+			ctx.font = (this.blockSize)+"px Arial";
+			ctx.fillText(this.columnNumbersGrid[i].number,
+				(this.columnNumbersGrid[i].x+(Math.floor(this.blockSize/4))),
+				(this.columnNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/6))));
+		}else{
+			ctx.font = (this.blockSize-3)+"px Arial";
+			ctx.fillText(this.columnNumbersGrid[i].number,
+				(this.columnNumbersGrid[i].x),
+				(this.columnNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/5))));
+		}
     }
 };
 
@@ -54,23 +71,32 @@ Nonogram.prototype.fillCels = function(mouseX, mouseY) {
 	ctx.beginPath();
 	// κελιά ανά γραμμή
 	for(var i=0; i<this.rowNumbersGrid.length; i++) {
-	   if(mouseX >= this.rowNumbersGrid[i].x && mouseY >= this.rowNumbersGrid[i].y                && mouseX <= (this.rowNumbersGrid[i].x + this.blockSize) && mouseY <= (this.rowNumbersGrid[i].y + this.blockSize)) {
+	   if(mouseX >= this.rowNumbersGrid[i].x && mouseY >= this.rowNumbersGrid[i].y && mouseX <= (this.rowNumbersGrid[i].x + this.blockSize) && mouseY <= (this.rowNumbersGrid[i].y + this.blockSize)) {
 	        //Αν το κελί έχει value 0 δηλαδή άμα δεν το είχε επιλέξει ο χρήστης τότε να το μαρκάρει με κόκκινη γραμμή 
-	      if(this.rowNumbersGrid[i].value === 0) {
-	          ctx.strokeStyle = "red";
-	         ctx.moveTo(this.rowNumbersGrid[i].x+3, (this.rowNumbersGrid[i].y + this.blockSize)-3);
-	          ctx.lineTo((this.rowNumbersGrid[i].x + this.blockSize)-3, this.rowNumbersGrid[i].y+3);
-	          this.rowNumbersGrid[i].value = 1;
-	       }else{
-	          //Αν το κελί έχει value διαφορετικό από 0 δηλαδή άμα ο χρήστης το είχε επιλέξει ήδη μια φορά τότε να το ξανά ζωγραφίσει όπως ήτανε 
-	          ctx.fillStyle = "#e0e0d1";
-	          ctx.fillRect(this.rowNumbersGrid[i].x+2, this.rowNumbersGrid[i].y+2, this.rowNumbersGrid[i].w-3, this.rowNumbersGrid[i].h-3);
-	          ctx.fillStyle = "black";
-	          ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
-	        	ctx.fillText( this.rowNumbersGrid[i].number, (this.rowNumbersGrid[i].x) + (this.blockSize/3), (this.rowNumbersGrid[i].y) + ((this.blockSize+8)/2));
-	          this.rowNumbersGrid[i].value = 0;
-	       }
-	      break;
+	      	if(this.rowNumbersGrid[i].value === 0) {
+				ctx.strokeStyle = "red";
+				ctx.moveTo(this.rowNumbersGrid[i].x+3, (this.rowNumbersGrid[i].y + this.blockSize)-3);
+				ctx.lineTo((this.rowNumbersGrid[i].x + this.blockSize)-3, this.rowNumbersGrid[i].y+3);
+				this.rowNumbersGrid[i].value = 1;
+	       	}else{
+				//Αν το κελί έχει value διαφορετικό από 0 δηλαδή άμα ο χρήστης το είχε επιλέξει ήδη μια φορά τότε να το ξανά ζωγραφίσει όπως ήτανε 
+				ctx.fillStyle = "#e0e0d1";
+				ctx.fillRect(this.rowNumbersGrid[i].x+2, this.rowNumbersGrid[i].y+2, this.rowNumbersGrid[i].w-3, this.rowNumbersGrid[i].h-3);
+				ctx.fillStyle = "black";
+				if(this.rowNumbersGrid[i].number < 10) {
+					ctx.font = (this.blockSize)+"px Arial";
+					ctx.fillText(this.rowNumbersGrid[i].number, 
+						(this.rowNumbersGrid[i].x+(Math.floor(this.blockSize/4))),
+						(this.rowNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/6))));
+				}else{
+					ctx.font = (this.blockSize-3)+"px Arial";
+					ctx.fillText(this.rowNumbersGrid[i].number, 
+						(this.rowNumbersGrid[i].x),
+						(this.rowNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/5))));
+				}
+				this.rowNumbersGrid[i].value = 0;
+			}
+			break;
 	   }
 	}
    
@@ -86,8 +112,17 @@ Nonogram.prototype.fillCels = function(mouseX, mouseY) {
 	                ctx.fillStyle = "#e0e0d1";
 	                ctx.fillRect(this.columnNumbersGrid[i].x+2, this.columnNumbersGrid[i].y+2, this.columnNumbersGrid[i].w-3, this.columnNumbersGrid[i].h-3);
 	                ctx.fillStyle = "black";
-	                ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
-	                ctx.fillText(this.columnNumbersGrid[i].number, (this.columnNumbersGrid[i].x) + (this.blockSize/3), (this.columnNumbersGrid[i].y) + ((this.blockSize+8)/2));
+            		if(this.columnNumbersGrid[i].number < 10) {
+						ctx.font = (this.blockSize)+"px Arial";
+						ctx.fillText(this.columnNumbersGrid[i].number, 
+							(this.columnNumbersGrid[i].x+(Math.floor(this.blockSize/4))),
+							(this.columnNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/6))));
+					}else{
+						ctx.font = (this.blockSize-3)+"px Arial";
+						ctx.fillText(this.columnNumbersGrid[i].number, 
+							(this.columnNumbersGrid[i].x),
+							(this.columnNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/5))));
+					}
 	                this.columnNumbersGrid[i].value = 0;
 	            }
 	            break;
@@ -215,29 +250,35 @@ Nonogram.prototype.fillCels = function(mouseX, mouseY) {
 };
 
 //Ζωγραφίζει το κελί μαύρο
-let drawBlackCellValue = 6; 
+let drawBlackCellValue = 3; 
 Nonogram.prototype.drawBlackCell = function(cell) {
     ctx.fillStyle = 'black';
-    ctx.fillRect(cell.x + drawBlackCellValue, cell.y + drawBlackCellValue,      cell.w - (drawBlackCellValue * 2), cell.h - (drawBlackCellValue * 2));
+    ctx.fillRect(cell.x + (drawBlackCellValue/scaleFactor), 
+    	cell.y + (drawBlackCellValue/scaleFactor), 
+    	cell.w - ((drawBlackCellValue/scaleFactor) * 2), 
+    	cell.h - ((drawBlackCellValue/scaleFactor) * 2));
 };
 
 //Ζωγραφίζει το κελί άσπρο
 let drawWhiteCellValue = 2;
 Nonogram.prototype.drawWhiteCell = function(cell) {
     ctx.fillStyle = "white";
-    ctx.fillRect(cell.x + drawWhiteCellValue, cell.y + drawWhiteCellValue, cell.w - (drawWhiteCellValue * 2), cell.h - (drawWhiteCellValue * 2));
+    ctx.fillRect(cell.x + (drawWhiteCellValue/scaleFactor), 
+    	cell.y + (drawWhiteCellValue/scaleFactor), 
+    	cell.w - ((drawWhiteCellValue/scaleFactor) * 2), 
+    	cell.h - ((drawWhiteCellValue/scaleFactor) * 2));
 };
 
 //Ζωγραφίζει ένα Χ μέσα στο κελί
-let drawXCellValue = 6;
+let drawXCellValue = 3;
 Nonogram.prototype.drawXCell = function(cell) {
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(cell.x + drawXCellValue, cell.y + drawXCellValue);
-    ctx.lineTo(cell.x + this.blockSize - drawXCellValue, cell.y + this.blockSize - drawXCellValue);
-    ctx.moveTo(cell.x + this.blockSize - drawXCellValue, cell.y + drawXCellValue);
-    ctx.lineTo(cell.x + drawXCellValue, cell.y + this.blockSize - drawXCellValue);
+    ctx.moveTo(cell.x + (drawXCellValue/scaleFactor), cell.y + (drawXCellValue/scaleFactor));
+    ctx.lineTo(cell.x + this.blockSize - (drawXCellValue/scaleFactor), cell.y + this.blockSize - (drawXCellValue/scaleFactor));
+    ctx.moveTo(cell.x + this.blockSize - (drawXCellValue/scaleFactor), cell.y + (drawXCellValue/scaleFactor));
+    ctx.lineTo(cell.x + (drawXCellValue/scaleFactor), cell.y + this.blockSize - (drawXCellValue/scaleFactor));
     ctx.stroke();
     ctx.closePath();
 };

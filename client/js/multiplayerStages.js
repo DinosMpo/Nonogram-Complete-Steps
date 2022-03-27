@@ -11,8 +11,9 @@ function createMultiplayerStage() {
         $("#container-tools").show();
         $("#multiplayer-tools").show();
         clearCanvas();
-        container.style.transform = "translateX(-50%)";
-        container.style.left = "50%";
+        container.style.left = "50%";    
+        container.style.top = "50%";
+        container.style.transform = "translate(-50%, -50%)";
         nonogram = new Nonogram(multiplayerStages[multiplayerStagesNames[multiplayerStageIndex]]);
         canvas.width = nonogram.width;
         canvas.height = nonogram.height;

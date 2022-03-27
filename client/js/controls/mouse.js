@@ -14,13 +14,13 @@ $(canvas).mousedown(function(event) {
         }else if(startPointMouseX>originWidth) {
             dragStart.x = startPointMouseX - translatePos.x;
             dragStart.y = startPointMouseY - translatePos.y;
-            dragged = true;            
+            dragged = true;
         }else if(startPointMouseY>originHeight) {
             dragStart.x = startPointMouseX - translatePos.x;
             dragStart.y = startPointMouseY - translatePos.y;
             dragged = true;
         }else{
-            isDown = true;        
+            isDown = true;
             ctx.save();
             ctx.translate(originX,originY);
             ctx.scale(scaleFactor,scaleFactor);
@@ -33,26 +33,44 @@ $(canvas).mousedown(function(event) {
             nonogram.findProgress();
         }
     }else if(state === "multiplayer") {
-        if(turn === true) {
-            ctx.save();
-            ctx.translate(originX,originY);
-            ctx.scale(scaleFactor,scaleFactor);
-            var gameData = nonogram.multiplayerFillCels(startPointMouseX, startPointMouseY);
-            ctx.restore();
-            sock.emit('update progress', gameData);
-            turn = false;
-            $("#info-current-progress").text("");
-            $("#info-current-progress").text(nonogram.findProgress() + "%");
-            if(nonogram.checkProgress()) {
-                if(multiplayerStageIndex == (multiplayerStagesNames.length-1)) {
-                    $('#multiplayer-finished-popup').show();
-                    sock.emit('multiplayer finished');
+        if(startPointMouseX<originX) {
+            dragStart.x = startPointMouseX - translatePos.x;
+            dragStart.y = startPointMouseY - translatePos.y;
+            dragged = true;
+        }else if(startPointMouseY<originY) {
+            dragStart.x = startPointMouseX - translatePos.x;
+            dragStart.y = startPointMouseY - translatePos.y;
+            dragged = true;
+        }else if(startPointMouseX>originWidth) {
+            dragStart.x = startPointMouseX - translatePos.x;
+            dragStart.y = startPointMouseY - translatePos.y;
+            dragged = true;
+        }else if(startPointMouseY>originHeight) {
+            dragStart.x = startPointMouseX - translatePos.x;
+            dragStart.y = startPointMouseY - translatePos.y;
+            dragged = true;
+        }else{
+            if(turn === true) {
+                ctx.save();
+                ctx.translate(originX,originY);
+                ctx.scale(scaleFactor,scaleFactor);
+                var gameData = nonogram.multiplayerFillCels((startPointMouseX-originX)/scaleFactor, (startPointMouseY-originY)/scaleFactor);
+                ctx.restore();
+                sock.emit('update progress', gameData);
+                turn = false;
+                $("#info-current-progress").text("");
+                $("#info-current-progress").text(nonogram.findProgress() + "%");
+                if(nonogram.checkProgress()) {
+                    if(multiplayerStageIndex == (multiplayerStagesNames.length-1)) {
+                        $('#multiplayer-finished-popup').show();
+                        sock.emit('multiplayer finished');
+                    }else{
+                        sock.emit('correct' , multiplayerGame);
+                    }
                 }else{
-                    sock.emit('correct' , multiplayerGame);
+                    $("#correct-multiplayer").hide();
+                    sock.emit('end-turn');
                 }
-            }else{
-                $("#correct-multiplayer").hide();
-                sock.emit('end-turn');
             }
         }
     }

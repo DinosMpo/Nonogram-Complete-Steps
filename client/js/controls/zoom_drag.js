@@ -28,8 +28,8 @@ function handleScroll(value) {
   if(value == -3 || value == -100) { //zoom in
     if(scaleFactor < 2.5) {
       scaleFactor += 0.1;
-       translatePos.x = mouseX;
-      translatePos.y = mouseY;
+       translatePos.x = (mouseX-originX)/scaleFactor;
+      translatePos.y = (mouseY-originY)/scaleFactor;
        zoom(scaleFactor, translatePos);
        translatePos.x = -((scaleFactor*translatePos.x)-translatePos.x);
        translatePos.y = -((scaleFactor*translatePos.y)-translatePos.y);
@@ -42,8 +42,8 @@ function handleScroll(value) {
   }else if(value == 3 || value == 100) { //zoom out
     if(scaleFactor > 1) {
       scaleFactor -= 0.1;
-       translatePos.x = mouseX;
-       translatePos.y = mouseY;
+       translatePos.x = (mouseX-originX)/scaleFactor;
+       translatePos.y = (mouseY-originY)/scaleFactor;
        zoom(scaleFactor, translatePos);
        translatePos.x = -((scaleFactor*translatePos.x)-translatePos.x);
        translatePos.y = -((scaleFactor*translatePos.y)-translatePos.y);
@@ -239,4 +239,145 @@ bottomControl.addEventListener('mousedown', function(event) {
     mouseY = event.offsetY || (event.pageY - bottomControl.offsetTop);
     $(this).hide();
     activeDragControl = "bottom";
+});
+
+// --- Drag Controls for touch
+let touchDragStartX = 0;
+let touchDragStartY = 0;
+
+leftControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+leftControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "left";
+});
+
+leftControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
+});
+
+topControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+topControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "top";
+});
+
+topControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
+});
+
+rightControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+rightControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "right";
+});
+
+rightControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
+});
+
+
+bottomControl.addEventListener("touchmove", function(event) {
+    if(activeDragControl) {
+        touchX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - Math.floor(touchDragStartX);
+        touchY = Math.floor(event.touches[0].clientY) - touchDragStartY;
+        if(isNaN(translatePos.x)) {
+            translatePos.x = 0;
+            translatePos.y = 0;
+        }
+        $(topControl).hide();
+        $(leftControl).hide();
+        $(rightControl).hide();
+        $(bottomControl).hide();
+        dragControl(touchX, touchY);
+    }
+});
+
+bottomControl.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    touchDragStartX = Math.floor(event.touches[0].clientX - ((window.innerWidth - canvas.width) / 2)) - translatePos.x;
+    touchDragStartY = Math.floor(event.touches[0].clientY) - translatePos.y;
+    $(this).hide();
+    activeDragControl = "bottom";
+});
+
+bottomControl.addEventListener("touchend", function(event) {
+    if(activeDragControl) { 
+        $(topControl).show();
+        $(leftControl).show();
+        $(rightControl).show();
+        $(bottomControl).show();
+        activeDragControl = null;
+    }
 });
