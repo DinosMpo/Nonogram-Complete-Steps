@@ -64,6 +64,7 @@ for(let i=0; i<allStages.length; i++) {
 $('#multiplayer').click(function() {
     $('#menu').hide();
     $('#game-lobbie').show();
+    $('#exit-multiplayer-waiting-lobby').show();
     sock.emit('multiplayer', "User looking for a team mate");
 });
 
