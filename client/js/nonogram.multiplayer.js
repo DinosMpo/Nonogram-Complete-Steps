@@ -143,8 +143,9 @@ sock.on('update', (data) => {
     if(data.dataType === "fill cell") {
         if(data.fillCellChoice === "default") {
             nonogram.emptyGrid[data.cell].value = data.value;
+            nonogram.emptyGrid[data.cell].playerChoice = "team mate";
             if(nonogram.emptyGrid[data.cell].value === 1) {
-                nonogram.drawBlackCell(nonogram.emptyGrid[data.cell]);
+                nonogram.drawRedCell(nonogram.emptyGrid[data.cell]);
                 nonogram.strokeTeamMateChoice(nonogram.emptyGrid[data.cell]);
                 nonogram.drawPreview(nonogram.emptyGrid[data.cell]);
             }else if(nonogram.emptyGrid[data.cell].value === 2) {
@@ -160,7 +161,7 @@ sock.on('update', (data) => {
         }else if(data.fillCellChoice === "black") {
             nonogram.emptyGrid[data.cell].value = data.value;
             if(nonogram.emptyGrid[data.cell].value === 1) {
-                nonogram.drawBlackCell(nonogram.emptyGrid[data.cell]);;
+                nonogram.drawRedCell(nonogram.emptyGrid[data.cell]);;
                 nonogram.strokeTeamMateChoice(nonogram.emptyGrid[data.cell]);
                 nonogram.drawPreview(nonogram.emptyGrid[data.cell]);
             }else{
@@ -187,8 +188,10 @@ sock.on('update', (data) => {
                 nonogram.strokeTeamMateChoice(nonogram.emptyGrid[data.cell]);
                 nonogram.drawPreview(nonogram.emptyGrid[data.cell]);
             }
-        }else if(data.dataType === "fill cell row numbers grid") {
+        }
+    }else if(data.dataType === "fill cell row numbers grid") {
             nonogram.rowNumbersGrid[data.cell].value = data.value;
+            
             ctx.lineWidth = 3;
             ctx.beginPath();
             if(nonogram.rowNumbersGrid[data.cell].value == 1) {        
@@ -199,8 +202,17 @@ sock.on('update', (data) => {
                 ctx.fillStyle = "#e0e0d1";
                 ctx.fillRect(nonogram.rowNumbersGrid[data.cell].x+2, nonogram.rowNumbersGrid[data.cell].y+2, nonogram.rowNumbersGrid[data.cell].w-3, nonogram.rowNumbersGrid[data.cell].h-3);
                 ctx.fillStyle = "black";
-                ctx.font = "bold " + (nonogram.blockSize / 2) + "px Arial";
-                ctx.fillText(nonogram.rowNumbersGrid[data.cell].number, (nonogram.rowNumbersGrid[data.cell].x) + (nonogram.blockSize/3), (nonogram.rowNumbersGrid[data.cell].y) + ((nonogram.blockSize+8)/2));
+                if(nonogram.rowNumbersGrid[data.cell].number < 10) {
+                    ctx.font = (nonogram.blockSize)+"px Arial";
+                    ctx.fillText(nonogram.rowNumbersGrid[data.cell].number, 
+                        (nonogram.rowNumbersGrid[data.cell].x+(Math.floor(nonogram.blockSize/4))),
+                        (nonogram.rowNumbersGrid[data.cell].y+(nonogram.blockSize-Math.floor(nonogram.blockSize/6))));
+                }else{
+                    ctx.font = (nonogram.blockSize-3)+"px Arial";
+                    ctx.fillText(nonogram.rowNumbersGrid[data.cell].number, 
+                        (nonogram.rowNumbersGrid[data.cell].x),
+                        (nonogram.rowNumbersGrid[data.cell].y+(nonogram.blockSize-Math.floor(nonogram.blockSize/5))));
+                }
             }
             ctx.stroke();
             ctx.closePath();
@@ -216,13 +228,21 @@ sock.on('update', (data) => {
                 ctx.fillStyle = "#e0e0d1";
                 ctx.fillRect(nonogram.columnNumbersGrid[data.cell].x+2, nonogram.columnNumbersGrid[data.cell].y+2, nonogram.columnNumbersGrid[data.cell].w-3, nonogram.columnNumbersGrid[data.cell].h-3);
                 ctx.fillStyle = "black";
-                ctx.font = "bold " + (nonogram.blockSize / 2) + "px Arial";
-                ctx.fillText(nonogram.columnNumbersGrid[data.cell].number, (nonogram.columnNumbersGrid[data.cell].x) + (nonogram.blockSize/3), (nonogram.columnNumbersGrid[data.cell].y) + ((nonogram.blockSize+8)/2));
+                if(nonogram.columnNumbersGrid[data.cell].number < 10) {
+                    ctx.font = (nonogram.blockSize)+"px Arial";
+                    ctx.fillText(nonogram.columnNumbersGrid[data.cell].number, 
+                        (nonogram.columnNumbersGrid[data.cell].x+(Math.floor(nonogram.blockSize/4))),
+                        (nonogram.columnNumbersGrid[data.cell].y+(nonogram.blockSize-Math.floor(nonogram.blockSize/6))));
+                }else{
+                    ctx.font = (nonogram.blockSize-3)+"px Arial";
+                    ctx.fillText(nonogram.columnNumbersGrid[data.cell].number, 
+                        (nonogram.columnNumbersGrid[data.cell].x),
+                        (nonogram.columnNumbersGrid[data.cell].y+(nonogram.blockSize-Math.floor(nonogram.blockSize/5))));
+                }
             }
             ctx.stroke();
             ctx.closePath();
         }
-    }
     ctx.restore();
     $("#info-current-progress").text("");
     $("#info-current-progress").text(nonogram.findProgress() + "%");
