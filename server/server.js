@@ -77,16 +77,18 @@ io.on('connection', (sock) => {
     });
 
     sock.on('exit-multiplayer', (data) => {
-    	io.nsps['/'].sockets[sock.id].leave('room-'+inRoom);
-		io.nsps['/'].sockets[sock.id].join('all');
 		if(sock.id === data.player1) {
-		   io.to(data.player2).emit('exit-multiplayer', 'Player 1 left the lobby...');
-		   io.nsps['/'].sockets[data.player2].leave('room-'+inRoom);
-		   io.nsps['/'].sockets[data.player2].join('all');
+			io.to(data.player2).emit('exit-multiplayer', 'Player 1 left the lobby...');
+			io.nsps['/'].sockets[data.player2].leave('room-'+inRoom);
+			io.nsps['/'].sockets[data.player2].join('all');
+			io.nsps['/'].sockets[sock.id].leave('room-'+inRoom);
+			io.nsps['/'].sockets[sock.id].join('all');
 		}else if(sock.id === data.player2) {
-		   io.to(data.player1).emit('exit-multiplayer','Player 2 left the lobby...');
-		   io.nsps['/'].sockets[data.player1].leave('room-'+inRoom);
-		   io.nsps['/'].sockets[data.player1].join('all');
+			io.to(data.player1).emit('exit-multiplayer','Player 2 left the lobby...');
+			io.nsps['/'].sockets[data.player1].leave('room-'+inRoom);
+			io.nsps['/'].sockets[data.player1].join('all');
+			io.nsps['/'].sockets[sock.id].leave('room-'+inRoom);
+			io.nsps['/'].sockets[sock.id].join('all');
 		}
 		inRoom = 0;
     });
