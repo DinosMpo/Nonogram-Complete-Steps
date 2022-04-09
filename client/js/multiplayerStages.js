@@ -4,6 +4,7 @@ let wait = false;
 function createMultiplayerStage() {
     $("#singleplayer-tools").hide();
     multiplayerStageIndex = 0;
+    $("#exit-multiplayer-waiting-lobby").hide();
     setTimeout(function(){
         state = "multiplayer";
         $('#game-lobbie').hide();
@@ -28,6 +29,8 @@ function createMultiplayerStage() {
         resetTools("multiplayer");
         $("#info-current-progress").text("");
         $("#info-current-progress").text(nonogram.findProgress() + "%");
+        limitBottom = nonogram.height-myLimit;
+        limitRight = nonogram.width-myLimit;
         $("#clients-count").hide();
     }, 3000);
 };
@@ -62,9 +65,9 @@ function createNextMultiplayerStage() {
 let multiplayerStagesNames = ['android', 'cuppa', 'skull', 'clown', 'candle'];
 let multiplayerStages = {
     'android': [[0,1,1,1,0],
+                [1,0,1,0,1],
                 [1,1,1,1,1],
-                [1,1,1,1,1],
-                [0,1,1,1,0],
+                [0,0,0,0,0],
                 [1,1,1,1,1],]
                 ,
                 

@@ -1,9 +1,10 @@
-function Cell(w, h, x, y, value) {
+function Cell(w, h, x, y, value, playerChoice) {
 	this.w = w;
 	this.h = h;
 	this.x = x;
 	this.y = y;
 	this.value = value;
+	this.playerChoice = playerChoice;
 };
 
 function NumberCell(w, h, x, y, value, number) {
@@ -120,7 +121,7 @@ function Nonogram(levelGrid) {
  	this.emptyGrid = [];
 	for(var i=this.maxColumnNumberSize*this.blockSize; i<this.height; i+=this.blockSize) {
 		for(var y=this.maxRowNumberSize*this.blockSize; y<this.width;  y+=this.blockSize) {
-			this.emptyGrid.push(new Cell(this.blockSize, this.blockSize, y, i, 0));
+			this.emptyGrid.push(new Cell(this.blockSize, this.blockSize, y, i, 0, ""));
 		}
 	}
 

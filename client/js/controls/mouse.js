@@ -104,6 +104,19 @@ $(canvas).mouseup(function(){
         store('columnNumbersGrid-'+currentStage, nonogram.userChoices.columnNumbersGrid);    
         $("#info-current-progress").text("");
         $("#info-current-progress").text(nonogram.findProgress() + "%");
+    }else if(state === "multiplayer") {
+        isDown = false;
+        if(dragged){
+            $(topControl).show();
+            $(leftControl).show();
+            $(rightControl).show();
+            $(bottomControl).show();
+            dragged = false;
+
+        }
+        if(activeDragControl) {
+            activeDragControl = null;
+        }
     }
 });
 
@@ -128,14 +141,16 @@ $(canvas).mouseout(function(){
 $(canvas).mousemove(function(event){
     mouseX = event.offsetX ;
     mouseY = event.offsetY ;
-    if(isDown){
-        ctx.save();
-        ctx.translate(originX,originY);
-        ctx.scale(scaleFactor,scaleFactor);
-        nonogram.fillMultiCells((mouseX-originX)/scaleFactor, (mouseY-originY)/scaleFactor, (startPointMouseX-originX)/scaleFactor, (startPointMouseY-originY)/scaleFactor);
-        ctx.restore();
-        $("#info-current-progress").text("");
-        $("#info-current-progress").text(nonogram.findProgress() + "%");
+    if(state === "level") {
+        if(isDown){
+            ctx.save();
+            ctx.translate(originX,originY);
+            ctx.scale(scaleFactor,scaleFactor);
+            nonogram.fillMultiCells((mouseX-originX)/scaleFactor, (mouseY-originY)/scaleFactor, (startPointMouseX-originX)/scaleFactor, (startPointMouseY-originY)/scaleFactor);
+            ctx.restore();
+            $("#info-current-progress").text("");
+            $("#info-current-progress").text(nonogram.findProgress() + "%");
+        }
     }
     if(dragged){
         dragControl(mouseX-dragStart.x, mouseY-dragStart.y);

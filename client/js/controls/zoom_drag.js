@@ -67,38 +67,65 @@ function zoom(scaleFactor, translatePos) {
     nonogram.drawGrid();
     nonogram.drawRowNumbers();
     nonogram.drawColumnNumbers();
-    for(let i=0; i<nonogram.emptyGrid.length; i++) {
-        if(nonogram.emptyGrid[i].value === 1){
-          nonogram.drawBlackCell(nonogram.emptyGrid[i]);
-          nonogram.drawPreview(nonogram.emptyGrid[i]);
-        }else if(nonogram.emptyGrid[i].value === 2) {
-          nonogram.drawXCell(nonogram.emptyGrid[i]);
-          nonogram.drawPreview(nonogram.emptyGrid[i]);
+    if(state === "level") {
+        for(let i=0; i<nonogram.emptyGrid.length; i++) {
+            if(nonogram.emptyGrid[i].value === 1){
+              nonogram.drawBlackCell(nonogram.emptyGrid[i]);
+              nonogram.drawPreview(nonogram.emptyGrid[i]);
+            }else if(nonogram.emptyGrid[i].value === 2) {
+              nonogram.drawXCell(nonogram.emptyGrid[i]);
+              nonogram.drawPreview(nonogram.emptyGrid[i]);
+            }
         }
-    }
-    ctx.beginPath();
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 3;
-    for(let i=0; i<nonogram.rowNumbersGrid.length; i++) {
-        if(nonogram.rowNumbersGrid[i].value === 1) {
-          ctx.moveTo(nonogram.rowNumbersGrid[i].x+3, 
-                   (nonogram.rowNumbersGrid[i].y + nonogram.blockSize)-3);
-          ctx.lineTo((nonogram.rowNumbersGrid[i].x + nonogram.blockSize)-3, 
-                   nonogram.rowNumbersGrid[i].y+3);
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+        for(let i=0; i<nonogram.rowNumbersGrid.length; i++) {
+            if(nonogram.rowNumbersGrid[i].value === 1) {
+                ctx.moveTo(nonogram.rowNumbersGrid[i].x+3, (nonogram.rowNumbersGrid[i].y + nonogram.blockSize)-3);
+                ctx.lineTo((nonogram.rowNumbersGrid[i].x + nonogram.blockSize)-3, nonogram.rowNumbersGrid[i].y+3);
+            }
         }
-    }
-    for(let i=0; i<nonogram.columnNumbersGrid.length; i++) {
-        if(nonogram.columnNumbersGrid[i].value === 1) {    
-          ctx.moveTo(nonogram.columnNumbersGrid[i].x+3, 
-                   (nonogram.columnNumbersGrid[i].y + nonogram.blockSize)-3);
-          ctx.lineTo((nonogram.columnNumbersGrid[i].x + nonogram.blockSize)-3, 
-                   nonogram.columnNumbersGrid[i].y+3);
+        for(let i=0; i<nonogram.columnNumbersGrid.length; i++) {
+            if(nonogram.columnNumbersGrid[i].value === 1) {    
+              ctx.moveTo(nonogram.columnNumbersGrid[i].x+3, (nonogram.columnNumbersGrid[i].y + nonogram.blockSize)-3);
+              ctx.lineTo((nonogram.columnNumbersGrid[i].x + nonogram.blockSize)-3, nonogram.columnNumbersGrid[i].y+3);
+            }
+        }
+    }else if(state === "multiplayer") {
+        for(let i=0; i<nonogram.emptyGrid.length; i++) {
+            if(nonogram.emptyGrid[i].value === 1){
+                if(nonogram.emptyGrid[i].playerChoice === "yours") {
+                    nonogram.drawBlueCell(nonogram.emptyGrid[i]);
+                    nonogram.drawPreview(nonogram.emptyGrid[i]);
+                }else if(nonogram.emptyGrid[i].playerChoice === "team mate") {
+                    nonogram.drawRedCell(nonogram.emptyGrid[i]);
+                    nonogram.drawPreview(nonogram.emptyGrid[i]);
+                }
+            }else if(nonogram.emptyGrid[i].value === 2) {
+                nonogram.drawXCell(nonogram.emptyGrid[i]);
+                nonogram.drawPreview(nonogram.emptyGrid[i]);
+            }
+        }
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+        for(let i=0; i<nonogram.rowNumbersGrid.length; i++) {
+            if(nonogram.rowNumbersGrid[i].value === 1) {
+                ctx.moveTo(nonogram.rowNumbersGrid[i].x+3, (nonogram.rowNumbersGrid[i].y + nonogram.blockSize)-3);
+                ctx.lineTo((nonogram.rowNumbersGrid[i].x + nonogram.blockSize)-3, nonogram.rowNumbersGrid[i].y+3);
+            }
+        }
+        for(let i=0; i<nonogram.columnNumbersGrid.length; i++) {
+            if(nonogram.columnNumbersGrid[i].value === 1) {    
+              ctx.moveTo(nonogram.columnNumbersGrid[i].x+3, (nonogram.columnNumbersGrid[i].y + nonogram.blockSize)-3);
+              ctx.lineTo((nonogram.columnNumbersGrid[i].x + nonogram.blockSize)-3, nonogram.columnNumbersGrid[i].y+3);
+            }
         }
     }
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
-
     if(scaleFactor !== 1) {
         $(topControl).show();
         $(leftControl).show();
@@ -132,10 +159,41 @@ function drag(translatePos) {
     nonogram.drawGrid();
     nonogram.drawRowNumbers();
     nonogram.drawColumnNumbers();
-    nonogram.retrieveProgress(retrieve(currentStage), 
-        retrieve('rowNumbersGrid-'+currentStage),
-        retrieve('columnNumbersGrid-'+currentStage));
-    nonogram.redrawProgress();
+    if(state === "level") {
+        nonogram.redrawProgress();
+    }else if(state === "multiplayer") {
+        for(let i=0; i<nonogram.emptyGrid.length; i++) {
+            if(nonogram.emptyGrid[i].value === 1){
+                if(nonogram.emptyGrid[i].playerChoice === "yours") {
+                    nonogram.drawBlueCell(nonogram.emptyGrid[i]);
+                    nonogram.drawPreview(nonogram.emptyGrid[i]);
+                }else if(nonogram.emptyGrid[i].playerChoice === "team mate") {
+                    nonogram.drawRedCell(nonogram.emptyGrid[i]);
+                    nonogram.drawPreview(nonogram.emptyGrid[i]);
+                }
+            }else if(nonogram.emptyGrid[i].value === 2) {
+                nonogram.drawXCell(nonogram.emptyGrid[i]);
+                nonogram.drawPreview(nonogram.emptyGrid[i]);
+            }
+        }
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+        for(let i=0; i<nonogram.rowNumbersGrid.length; i++) {
+            if(nonogram.rowNumbersGrid[i].value === 1) {
+                ctx.moveTo(nonogram.rowNumbersGrid[i].x+3, (nonogram.rowNumbersGrid[i].y + nonogram.blockSize)-3);
+                ctx.lineTo((nonogram.rowNumbersGrid[i].x + nonogram.blockSize)-3, nonogram.rowNumbersGrid[i].y+3);
+            }
+        }
+        for(let i=0; i<nonogram.columnNumbersGrid.length; i++) {
+            if(nonogram.columnNumbersGrid[i].value === 1) {    
+              ctx.moveTo(nonogram.columnNumbersGrid[i].x+3, (nonogram.columnNumbersGrid[i].y + nonogram.blockSize)-3);
+              ctx.lineTo((nonogram.columnNumbersGrid[i].x + nonogram.blockSize)-3, nonogram.columnNumbersGrid[i].y+3);
+            }
+        }
+    }
+    ctx.closePath();
+    ctx.stroke();
     ctx.restore();
 };
 
