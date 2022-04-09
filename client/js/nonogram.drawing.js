@@ -283,6 +283,26 @@ Nonogram.prototype.drawXCell = function(cell) {
     ctx.closePath();
 };
 
+//Ζωγραφίζει το κελί κόκκινο
+let drawRedCellValue = 3; 
+Nonogram.prototype.drawRedCell = function(cell) {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(cell.x + (drawBlackCellValue/scaleFactor), 
+    	cell.y + (drawBlackCellValue/scaleFactor), 
+    	cell.w - ((drawBlackCellValue/scaleFactor) * 2), 
+    	cell.h - ((drawBlackCellValue/scaleFactor) * 2));
+};
+
+//Ζωγραφίζει το κελί μπλε
+let drawBlueCellValue = 3; 
+Nonogram.prototype.drawBlueCell = function(cell) {
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(cell.x + (drawBlackCellValue/scaleFactor), 
+    	cell.y + (drawBlackCellValue/scaleFactor), 
+    	cell.w - ((drawBlackCellValue/scaleFactor) * 2), 
+    	cell.h - ((drawBlackCellValue/scaleFactor) * 2));
+};
+
 Nonogram.prototype.strokeCurrentChoice = function(cell) {
     if(this.previousChoice.active) {
         ctx.beginPath();
@@ -444,13 +464,39 @@ Nonogram.prototype.redrawProgress = function() {
    ctx.stroke();
 };
 
+Nonogram.prototype.strokeMultiplayerCurrentChoice = function(cell) {
+    if(this.previousChoice.active) {
+        ctx.beginPath();
+        for(let i=0; i<this.previousChoice.cell.length; i++) {
+            if(this.previousChoice.cell[i].value === 1) {
+                this.drawWhiteCell(this.previousChoice.cell[i]);
+                this.drawBlueCell(this.previousChoice.cell[i]);
+            }else if(this.previousChoice.cell[i].value === 2) {
+                this.drawWhiteCell(this.previousChoice.cell[i]);
+                this.drawXCell(this.previousChoice.cell[i]);
+            }else{
+                this.drawWhiteCell(this.previousChoice.cell[i]);
+            }
+        }
+        ctx.stroke();
+        ctx.closePath();
+        this.previousChoice.cell = []; //Αδειάζουμε των πίνακα
+    }
+    this.currentChoice.cell = cell;
+    this.previousChoice.cell.push(cell);
+    this.previousChoice.active = true;
+    ctx.strokeStyle = "red";
+    ctx.lineWidth   = 4;
+    ctx.strokeRect(cell.x+5, cell.y+5, this.blockSize-10, this.blockSize-10);
+};
+
 Nonogram.prototype.strokeTeamMateChoice = function(cell) {
     if(this.previousTeamMateChoice.active) {
         ctx.beginPath();
         for(let i=0; i<this.previousTeamMateChoice.cell.length; i++) {
             if(this.previousTeamMateChoice.cell[i].value === 1) {
                 this.drawWhiteCell(this.previousTeamMateChoice.cell[i]);
-                this.drawBlackCell(this.previousTeamMateChoice.cell[i]);
+                this.drawRedCell(this.previousTeamMateChoice.cell[i]);
             }else if(this.previousTeamMateChoice.cell[i].value === 2) {
                 this.drawWhiteCell(this.previousTeamMateChoice.cell[i]);
                 this.drawXCell(this.previousTeamMateChoice.cell[i]);
@@ -468,7 +514,7 @@ Nonogram.prototype.strokeTeamMateChoice = function(cell) {
     }
     this.previousTeamMateChoice.cell.push(cell);
     this.previousTeamMateChoice.active = true;
-    ctx.strokeStyle = "#0099ff";
+    ctx.strokeStyle = "blue";
     ctx.lineWidth   = 4;
     ctx.strokeRect(cell.x+5, cell.y+5, this.blockSize-10, this.blockSize-10);
 };
@@ -489,7 +535,7 @@ Nonogram.prototype.multiplayerFillCels = function(mouseX, mouseY) {
         if(mouseX >= this.rowNumbersGrid[i].x && mouseY >= this.rowNumbersGrid[i].y && 
             mouseX <= (this.rowNumbersGrid[i].x + this.blockSize) && 
             mouseY <= (this.rowNumbersGrid[i].y + this.blockSize)) {
-                nonogram.multiplayerStrokeRowNumbersChoice(i, gameData);
+                gameData = nonogram.multiplayerStrokeRowNumbersChoice(i, gameData);
                 return gameData;
           }
     }
@@ -498,7 +544,7 @@ Nonogram.prototype.multiplayerFillCels = function(mouseX, mouseY) {
           if(mouseX >= this.columnNumbersGrid[i].x && mouseY >= this.columnNumbersGrid[i].y &&  
            mouseX <= (this.columnNumbersGrid[i].x + this.blockSize) && mouseY <= 
            (this.columnNumbersGrid[i].y + this.blockSize)) {
-                 nonogram.multiplayerStrokeColumnNumbersChoice(i, gameData);
+                 gameData = nonogram.multiplayerStrokeColumnNumbersChoice(i, gameData);
                  return gameData;
           }
     }
@@ -514,33 +560,32 @@ Nonogram.prototype.multiplayerFillCels = function(mouseX, mouseY) {
             var x = this.emptyGrid[i].x, y = this.emptyGrid[i].y;
             var value = this.emptyGrid[i].value;
             var width = this.emptyGrid[i].w, height = this.emptyGrid[i].h;
-            var xPos = ((x - (rowSize * block)) / block) * 
-                       Math.floor(((rowSize * block) / rowLength)) - 2;
-            var yPos = ((y - (columnSize * block)) / block) * 
-                       Math.floor(((columnSize * block) / columnLength)) - 2;
+            var xPos = ((x - (rowSize * block)) / block) * Math.floor(((rowSize * block) / rowLength)) - 2;
+            var yPos = ((y - (columnSize * block)) / block) * Math.floor(((columnSize * block) / columnLength)) - 2;
 
             if(mouseX >= x && mouseY >= y && mouseX <= (x + block) && mouseY <= (y + block)) {
                 if(value == 0) {
                       this.emptyGrid[i].value = 1;
-                      this.drawBlackCell(this.emptyGrid[i]);
+                      this.drawBlueCell(this.emptyGrid[i]);
                       this.drawPreview(this.emptyGrid[i]);
-                      this.strokeCurrentChoice(this.emptyGrid[i]);
+                      this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
                       gameData.value  = 1;
                 }else if(value == 1) {
                       this.emptyGrid[i].value = 2;
                       this.drawWhiteCell(this.emptyGrid[i]);
                       this.drawXCell(this.emptyGrid[i]);
                       this.drawPreview(this.emptyGrid[i]);
-                      this.strokeCurrentChoice(this.emptyGrid[i]);
+                      this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
                       gameData.value  = 2;
                 }else {
                       this.emptyGrid[i].value = 0;
                       ctx.fillStyle = "white";
                     ctx.fillRect(x + 2, y + 2, width - 3, height - 3);
                     this.drawPreview(this.emptyGrid[i]);
-                    this.strokeCurrentChoice(this.emptyGrid[i]);
+                    this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
                       gameData.value  = 0;            
                 }
+                this.emptyGrid[i].playerChoice = "yours";
                 gameData.dataType = "fill cell";
                 gameData.fillCellChoice = "default";
                 gameData.cell  =  i;
@@ -560,17 +605,18 @@ Nonogram.prototype.multiplayerFillCels = function(mouseX, mouseY) {
             if(mouseX >= x && mouseY >= y && mouseX <= (x + block) && mouseY <= (y + block)) {
                 if(this.emptyGrid[i].value !== 1) {
                       this.emptyGrid[i].value = 1;
-                      this.drawBlackCell(this.emptyGrid[i]);
+                      this.drawBlueCell(this.emptyGrid[i]);
                       this.drawPreview(this.emptyGrid[i]);
-                      this.strokeCurrentChoice(this.emptyGrid[i]);
+                      this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
                       gameData.value  = 1;
                 }else{
                     this.emptyGrid[i].value = 0;
                       this.drawWhiteCell(this.emptyGrid[i]);
                       this.drawPreview(this.emptyGrid[i]);
-                      this.strokeCurrentChoice(this.emptyGrid[i]);
+                      this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
                       gameData.value  = 0;
                 }
+                this.emptyGrid[i].playerChoice = "yours";
                 gameData.dataType = "fill cell";
                 gameData.fillCellChoice = "black";
                 gameData.cell  =  i;
@@ -593,15 +639,16 @@ Nonogram.prototype.multiplayerFillCels = function(mouseX, mouseY) {
 					this.drawWhiteCell(this.emptyGrid[i]);
 					this.drawXCell(this.emptyGrid[i]);
 					this.drawPreview(this.emptyGrid[i]);
-					this.strokeCurrentChoice(this.emptyGrid[i]);
+					this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
 					gameData.value  = 2;
                 }else{
                     this.emptyGrid[i].value = 0;
 					this.drawWhiteCell(this.emptyGrid[i]);
 					this.drawPreview(this.emptyGrid[i]);
-					this.strokeCurrentChoice(this.emptyGrid[i]);
+					this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
 					gameData.value  = 0;
                 }
+                this.emptyGrid[i].playerChoice = "yours";
                 gameData.dataType = "fill cell";
                 gameData.fillCellChoice = "x";
                 gameData.cell  =  i;
@@ -621,9 +668,10 @@ Nonogram.prototype.multiplayerFillCels = function(mouseX, mouseY) {
 	                this.emptyGrid[i].value = 0;
 	                this.drawWhiteCell(this.emptyGrid[i]);
 	                this.drawPreview(this.emptyGrid[i]);
-	                this.strokeCurrentChoice(this.emptyGrid[i]);
+	                this.strokeMultiplayerCurrentChoice(this.emptyGrid[i]);
 	                gameData.value  = 0;
 	            }
+	            this.emptyGrid[i].playerChoice = "yours";
 	            gameData.dataType = "fill cell";
 	            gameData.fillCellChoice = "white";
 	            gameData.cell  =  i;
@@ -635,31 +683,40 @@ Nonogram.prototype.multiplayerFillCels = function(mouseX, mouseY) {
 
 Nonogram.prototype.multiplayerStrokeRowNumbersChoice = function(i, gameData) {
     if(this.rowNumbersGrid[i].value == 0) {
-        ctx.beginPath();
-          ctx.strokeStyle = "red";
-          ctx.moveTo(this.rowNumbersGrid[i].x+3, 
-                   (this.rowNumbersGrid[i].y + this.blockSize)-3);
-          ctx.lineTo((this.rowNumbersGrid[i].x + this.blockSize)-3, 
-                    this.rowNumbersGrid[i].y+3);
-          ctx.stroke();
-          ctx.closePath();
-          ctx.strokeStyle = "black";
-          this.rowNumbersGrid[i].value = 1;
-          gameData.dataType = "fill cell row numbers grid";
-          gameData.cell  =  i;
-          gameData.value  = 1;      
+		ctx.beginPath();
+		ctx.strokeStyle = "red";
+		ctx.moveTo(this.rowNumbersGrid[i].x+3, 
+		       (this.rowNumbersGrid[i].y + this.blockSize)-3);
+		ctx.lineTo((this.rowNumbersGrid[i].x + this.blockSize)-3, 
+		        this.rowNumbersGrid[i].y+3);
+		ctx.stroke();
+		ctx.closePath();
+		ctx.strokeStyle = "black";
+		this.rowNumbersGrid[i].value = 1;
+		gameData.dataType = "fill cell row numbers grid";
+		gameData.cell  =  i;
+		gameData.value  = 1;   
+		return gameData;   
     }else{
-        ctx.fillStyle = "#e0e0d1";
-          ctx.fillRect(this.rowNumbersGrid[i].x+2, this.rowNumbersGrid[i].y+2, 
-                     this.rowNumbersGrid[i].w-3, this.rowNumbersGrid[i].h-3);
-          ctx.fillStyle = "black";
-          ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
-          ctx.fillText( this.rowNumbersGrid[i].number, (this.rowNumbersGrid[i].x) + 
-                    (this.blockSize/3), (this.rowNumbersGrid[i].y) + ((this.blockSize+8)/2));
-          this.rowNumbersGrid[i].value = 0;
-          gameData.dataType = "fill cell row numbers grid";
-          gameData.cell  =  i;
-          gameData.value  = 0;
+		ctx.fillStyle = "#e0e0d1";
+		ctx.fillRect(this.rowNumbersGrid[i].x+2, this.rowNumbersGrid[i].y+2, this.rowNumbersGrid[i].w-3, this.rowNumbersGrid[i].h-3);
+		ctx.fillStyle = "black";
+		if(this.rowNumbersGrid[i].number < 10) {
+			ctx.font = (this.blockSize)+"px Arial";
+			ctx.fillText(this.rowNumbersGrid[i].number, 
+				(this.rowNumbersGrid[i].x+(Math.floor(this.blockSize/4))),
+				(this.rowNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/6))));
+		}else{
+			ctx.font = (this.blockSize-3)+"px Arial";
+			ctx.fillText(this.rowNumbersGrid[i].number, 
+				(this.rowNumbersGrid[i].x),
+				(this.rowNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/5))));
+		}
+		this.rowNumbersGrid[i].value = 0;
+		gameData.dataType = "fill cell row numbers grid";
+		gameData.cell  =  i;
+		gameData.value  = 0;
+		return gameData;
     }
 };
 
@@ -678,17 +735,26 @@ Nonogram.prototype.multiplayerStrokeColumnNumbersChoice = function(i, gameData) 
           gameData.dataType = "fill cell column numbers grid";
           gameData.cell  =  i;
           gameData.value  = 1;
+          return gameData;
     }else{
-          ctx.fillStyle = "#e0e0d1";
-          ctx.fillRect(this.columnNumbersGrid[i].x+2, this.columnNumbersGrid[i].y+2, 
-                     this.columnNumbersGrid[i].w-3, this.columnNumbersGrid[i].h-3);
-          ctx.fillStyle = "black";
-          ctx.font = "bold " + (this.blockSize / 2) + "px Arial";
-          ctx.fillText(this.columnNumbersGrid[i].number, (this.columnNumbersGrid[i].x) + 
-                 (this.blockSize/3), (this.columnNumbersGrid[i].y) + ((this.blockSize+8)/2));
-          this.columnNumbersGrid[i].value = 0;
-          gameData.dataType = "fill cell column numbers grid";
-          gameData.cell  =  i;
-          gameData.value  = 0;
+	    ctx.fillStyle = "#e0e0d1";
+	    ctx.fillRect(this.columnNumbersGrid[i].x+2, this.columnNumbersGrid[i].y+2, this.columnNumbersGrid[i].w-3, this.columnNumbersGrid[i].h-3);
+	    ctx.fillStyle = "black";
+		if(this.columnNumbersGrid[i].number < 10) {
+			ctx.font = (this.blockSize)+"px Arial";
+			ctx.fillText(this.columnNumbersGrid[i].number, 
+				(this.columnNumbersGrid[i].x+(Math.floor(this.blockSize/4))),
+				(this.columnNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/6))));
+		}else{
+			ctx.font = (this.blockSize-3)+"px Arial";
+			ctx.fillText(this.columnNumbersGrid[i].number, 
+				(this.columnNumbersGrid[i].x),
+				(this.columnNumbersGrid[i].y+(this.blockSize-Math.floor(this.blockSize/5))));
+		}
+	    this.columnNumbersGrid[i].value = 0;
+		gameData.dataType = "fill cell column numbers grid";
+		gameData.cell  =  i;
+		gameData.value  = 0;
+		return gameData;
     }
 };
