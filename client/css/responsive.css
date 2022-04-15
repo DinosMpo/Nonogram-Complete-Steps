@@ -22,7 +22,6 @@
 
 @media only screen and (max-height: 402px) { 
 	#levels {
-		background-color: red;
 		font-size: 20px;
 	}
 
@@ -76,31 +75,19 @@
 
 @media only screen and (max-height: 300px) { 
 	#menu {
-		/*background-color: red;*/
 		left:  75%;
 		bottom: 5%;
 		font-size: 25px;
 	}
 
 	#clients-count {
-		background-color: red;
 		font-size: 20px;
-	}
-
-	#levels {
-		background-color: red;
-
 	}
 
 	#instructions {
 		top: 35%;
 		transform: translate(-32%, -40%);
-		/*width: 73%;*/
 		font-size: 16px;
-	}
-
-	#correct-multiplayer { 
-		background-color: red;
 	}
 }
 
@@ -139,7 +126,6 @@
 @media only screen and (max-width: 550px) {
 	#instructions {
 		min-width: 300px;
-		background-color: red;
 		font-size: 17px;
 	}
 }

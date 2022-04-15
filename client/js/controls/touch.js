@@ -51,9 +51,7 @@ $(canvas).on('touchstart', function(event) {
     }else if(state === 'multiplayer') {
         evCache.push(event.touches[touches]);
         touches++;
-        if(evCache.length == 2) {
-            touchZoom = true;
-        }
+        if(evCache.length == 2) touchZoom = true;
         if(startPointTouchX<originX) {
             dragStart.x = startPointTouchX - translatePos.x;
             dragStart.y = startPointTouchY - translatePos.y;
