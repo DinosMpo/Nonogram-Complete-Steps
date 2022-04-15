@@ -101,7 +101,7 @@ io.on('connection', (sock) => {
 
     sock.on('disconnect', () => {
     	clients --;
-		io.sockets.emit('broadcast', { description: 'Players online: ' + clients });
+		io.sockets.emit('refresh counter', { description: 'Players online: ' + clients });
 		if(inRoom != 0) {
 		  if(multiplayerGame) {
 		    if(sock.id === multiplayerGame.player1) {
