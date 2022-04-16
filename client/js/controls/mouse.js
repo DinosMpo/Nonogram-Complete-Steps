@@ -56,20 +56,23 @@ $(canvas).mousedown(function(event) {
                 ctx.scale(scaleFactor,scaleFactor);
                 var gameData = nonogram.multiplayerFillCels((startPointMouseX-originX)/scaleFactor, (startPointMouseY-originY)/scaleFactor);
                 ctx.restore();
-                sock.emit('update progress', gameData);
-                turn = false;
-                $("#info-current-progress").text("");
-                $("#info-current-progress").text(nonogram.findProgress() + "%");
-                if(nonogram.checkProgress()) {
-                    if(multiplayerStageIndex == (multiplayerStagesNames.length-1)) {
-                        $('#multiplayer-finished-popup').show();
-                        sock.emit('multiplayer finished');
+                if(gameData) {
+                    sock.emit('update progress', gameData);
+                    turn = false;
+                    $("#info-current-progress").text("");
+                    $("#info-current-progress").text(nonogram.findProgress() + "%");
+                    if(nonogram.checkProgress()) {
+                        if(multiplayerStageIndex == (multiplayerStagesNames.length-1)) {
+                            $('#multiplayer-finished-popup').show();
+                            sock.emit('multiplayer finished');
+                        }else{
+                            sock.emit('correct' , multiplayerGame);
+                        }
                     }else{
-                        sock.emit('correct' , multiplayerGame);
+                        $("#correct-multiplayer").hide();
+                        sock.emit('end-turn');
                     }
-                }else{
-                    $("#correct-multiplayer").hide();
-                    sock.emit('end-turn');
+                    gameData = null;
                 }
             }
         }

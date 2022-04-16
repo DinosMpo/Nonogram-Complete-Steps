@@ -125,20 +125,23 @@ $(canvas).on('touchend', function(event) {
                 ctx.scale(scaleFactor,scaleFactor);
                 gameData = nonogram.multiplayerFillCels((startPointTouchX-originX)/scaleFactor, (startPointTouchY-originY)/scaleFactor);
                 ctx.restore();
-                turn = false;
-                $("#info-current-progress").text("");
-                $("#info-current-progress").text(nonogram.findProgress() + "%");
-                sock.emit('update progress', gameData);
-                if(nonogram.checkProgress()) {
-                    if(multiplayerStageIndex == (multiplayerStagesNames.length-1)) {
-                        $('#multiplayer-finished-popup').show();
-                        sock.emit('multiplayer finished');
+                if(gameData) {
+                    turn = false;
+                    $("#info-current-progress").text("");
+                    $("#info-current-progress").text(nonogram.findProgress() + "%");
+                    sock.emit('update progress', gameData);
+                    if(nonogram.checkProgress()) {
+                        if(multiplayerStageIndex == (multiplayerStagesNames.length-1)) {
+                            $('#multiplayer-finished-popup').show();
+                            sock.emit('multiplayer finished');
+                        }else{
+                            sock.emit('correct' , multiplayerGame);
+                        }
                     }else{
-                        sock.emit('correct' , multiplayerGame);
+                        $("#correct-multiplayer").hide();
+                        sock.emit('end-turn');
                     }
-                }else{
-                    $("#correct-multiplayer").hide();
-                    sock.emit('end-turn');
+                    gameData = null;
                 }
             }
         }
